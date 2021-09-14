@@ -23,12 +23,14 @@ elif platform.system() == "Windows":
 
 
 def Execute():
-    textBox['text'] += "Execute" + "\n"
+    textBox.insert(END, "Execute")
+    textBox.yview(END)
     Display("Execute")
 
 
 def Reset():
-    textBox['text'] += "Reset" + "\n"
+    textBox.insert(END, "Reset")
+    textBox.yview(END)
     Display("Reset      ")
 
 
@@ -38,13 +40,23 @@ def Display(x):
 
 
 def Clear():
-    textBox['text'] = ""
+    textBox.delete(0, END)
     Display("Clear      ")
 
 
-textBox = Label(root, bg="blue", width=45, height=20,
-                anchor="nw", justify="left")
-textBox.place(x=40, y=60)
+# create frame and scrollbar
+my_frame = Frame(root)
+my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)
+
+
+textBox = Listbox(my_frame, bg="blue", width=60, height=20,
+                  justify="left", yscrollcommand=my_scrollbar.set)
+
+# config scrollar
+my_scrollbar.config(command=textBox.yview)
+my_scrollbar.pack(side=RIGHT, fill=Y)
+my_frame.place(x=40, y=60)
+textBox.pack()
 
 
 osLabel = Label(root, bg="blue", text="OS Detected: " + platform.system())
