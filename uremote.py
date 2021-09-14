@@ -9,7 +9,7 @@ port = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=3.0)
 root = Tk()
 root.attributes('-fullscreen', True)
 root.configure(background='black')
-root.title("uRemote")
+root.title("uRemote For All")
 root.geometry('480x640')
 
 text = ""
@@ -29,7 +29,7 @@ def Display(x):
     myLabel.place(x=200, y=100)
 
 
-osLabel = Label(root, text=platform.system())
+osLabel = Label(root, text= "OS Detected: " + platform.system())
 osLabel.place(x=100, y=20)
 
 btn = Button(root, text="Execute", command=Execute)
