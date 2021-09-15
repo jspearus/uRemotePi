@@ -62,7 +62,7 @@ textBox.pack()
 osLabel = Label(root, bg="blue", text="OS Detected: " + platform.system())
 osLabel.place(x=40, y=20)
 
-btn = Button(root, text="Execute", bg="blue", command=Execute)
+btn = Button(root, text="Execute", bg="red", command=Execute)
 btn.place(x=350, y=575)
 
 
