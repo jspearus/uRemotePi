@@ -49,7 +49,7 @@ my_frame = Frame(root)
 my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)
 
 
-textBox = Listbox(my_frame, bg="blue", width=60, height=20,
+textBox = Listbox(my_frame, bg="blue", width=40, height=20,
                   justify="left", yscrollcommand=my_scrollbar.set)
 
 # config scrollar
