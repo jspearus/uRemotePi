@@ -8,7 +8,7 @@ import platform
 root = Tk()
 root.configure(background='black')
 root.title("uRemote For All")
-root.geometry('480x640')
+root.geometry('640x480')
 
 
 text = ""
@@ -36,7 +36,7 @@ def Reset():
 
 def Display(x):
     myLabel = Label(root, bg="blue", text=x)
-    myLabel.place(x=40, y=420)
+    myLabel.place(x=250, y=10)
 
 
 def Clear():
@@ -63,17 +63,17 @@ osLabel = Label(root, bg="blue", text="OS Detected: " + platform.system())
 osLabel.place(x=40, y=20)
 
 btn = Button(root, text="Execute", bg="red", command=Execute)
-btn.place(x=350, y=575)
+btn.place(x=350, y=400)
 
 
 btn2 = Button(root, text="RESET", bg="blue", command=Reset)
-btn2.place(x=175, y=575)
+btn2.place(x=175, y=400)
 
 btn4 = Button(root, text="clear", bg="blue", command=Clear)
-btn4.place(x=40, y=575)
+btn4.place(x=40, y=400)
 
 
 Btn3 = Button(root, text="Quit", bg="blue", command=root.destroy)
-Btn3.place(x=400, y=10)
+Btn3.place(x=500, y=10)
 
 root.mainloop()
