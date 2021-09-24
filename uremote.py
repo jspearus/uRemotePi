@@ -25,12 +25,18 @@ elif platform.system() == "Windows":
 def Execute():
     textBox.insert(END, "Execute")
     textBox.yview(END)
+    my_frame.place_forget()
+    new_frame.place(x=40, y=60, width=300, height=200)
+    btn5.place(x=700, y=200)
     Display("Execute")
 
 
 def Reset():
     textBox.insert(END, "Reset")
     textBox.yview(END)
+    new_frame.place_forget()
+    btn5.place_forget()
+    my_frame.place(x=40, y=60)
     Display("Reset      ")
 
 
@@ -46,6 +52,7 @@ def Clear():
 
 # create frame and scrollbar
 my_frame = Frame(root)
+
 my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)
 
 
@@ -57,6 +64,17 @@ my_scrollbar.config(command=textBox.yview)
 my_scrollbar.pack(side=RIGHT, fill=Y)
 my_frame.place(x=40, y=60)
 textBox.pack()
+
+new_frame = Frame(root, bg="blue")
+
+newLabel = Label(new_frame, bg="red", justify="left", text='this is a test')
+secLabel = Label(new_frame, bg="grey", justify="left",
+                 text='this is a new test')
+newLabel.place(x=0, y=0)
+secLabel.place(x=30, y=100)
+
+btn5 = Button(root, text="new button", bg="red", command=Reset)
+
 
 Btn3 = Button(root, text="Quit", bg="blue", command=root.destroy)
 Btn3.place(x=700, y=10)
