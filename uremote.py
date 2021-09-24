@@ -58,22 +58,23 @@ my_scrollbar.pack(side=RIGHT, fill=Y)
 my_frame.place(x=40, y=60)
 textBox.pack()
 
+Btn3 = Button(root, text="Quit", bg="blue", command=root.destroy)
+Btn3.place(x=700, y=10)
+
 
 osLabel = Label(root, bg="blue", text="OS Detected: " + platform.system())
 osLabel.place(x=40, y=20)
 
+
 btn = Button(root, text="Execute", bg="red", command=Execute)
-btn.place(x=350, y=400)
+btn.place(x=700, y=400)
 
 
 btn2 = Button(root, text="RESET", bg="blue", command=Reset)
-btn2.place(x=175, y=400)
+btn2.place(x=600, y=400)
 
 btn4 = Button(root, text="clear", bg="blue", command=Clear)
-btn4.place(x=40, y=400)
+btn4.place(x=40, y=440)
 
-
-Btn3 = Button(root, text="Quit", bg="blue", command=root.destroy)
-Btn3.place(x=500, y=10)
 
 root.mainloop()
