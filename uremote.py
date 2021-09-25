@@ -6,9 +6,15 @@ import platform
 
 
 root = Tk()
+hud = Tk()
+
 root.configure(background='black')
-root.title("uRemote For All")
+root.title("_Mantis_Blade_")
 root.geometry('800x480')
+
+hud.configure(background='black')
+hud.title("_Mantis_Blade_")
+hud.geometry('600x300')
 
 
 text = ""
@@ -22,32 +28,37 @@ elif platform.system() == "Windows":
     pass
 
 
-def Execute():
-    textBox.insert(END, "Execute")
+def Config():
+    textBox.insert(END, "Config")
     textBox.yview(END)
     my_frame.place_forget()
     new_frame.place(x=40, y=60, width=300, height=200)
-    btn5.place(x=700, y=200)
+    btn2.place(x=700, y=200)
     Display("Execute")
 
 
-def Reset():
-    textBox.insert(END, "Reset")
+def Dashboard():
+    textBox.insert(END, "Dashboard")
     textBox.yview(END)
     new_frame.place_forget()
-    btn5.place_forget()
+    btn2.place_forget()
     my_frame.place(x=40, y=60)
     Display("Reset      ")
 
 
 def Display(x):
-    myLabel = Label(root, bg="blue", text=x)
+    myLabel = Label(root, bg="DarkOrange1", text=x)
     myLabel.place(x=250, y=10)
 
 
 def Clear():
     textBox.delete(0, END)
     Display("Clear      ")
+
+
+def Quit():
+    root.destroy()
+    hud.destroy()
 
 
 # create frame and scrollbar
@@ -65,34 +76,37 @@ my_scrollbar.pack(side=RIGHT, fill=Y)
 my_frame.place(x=40, y=60)
 textBox.pack()
 
-new_frame = Frame(root, bg="blue")
+new_frame = Frame(root, bg="snow")
 
-newLabel = Label(new_frame, bg="red", justify="left", text='this is a test')
+newLabel = Label(new_frame, bg="Orange", justify="left",
+                 text='Mantis_Blade_config')
 secLabel = Label(new_frame, bg="grey", justify="left",
                  text='this is a new test')
 newLabel.place(x=0, y=0)
 secLabel.place(x=30, y=100)
 
-btn5 = Button(root, text="new button", bg="red", command=Reset)
+btn2 = Button(root, text="Dashboard", bg="red", command=Dashboard)
 
 
-Btn3 = Button(root, text="Quit", bg="blue", command=root.destroy)
+Btn3 = Button(root, text="Quit", bg="blue", command=Quit)
 Btn3.place(x=700, y=10)
 
 
-osLabel = Label(root, bg="blue", text="OS Detected: " + platform.system())
+osLabel = Label(root, bg="DarkOrange2",
+                text="OS Detected: " + platform.system())
 osLabel.place(x=40, y=20)
 
 
-btn = Button(root, text="Execute", bg="red", command=Execute)
+btn = Button(root, text="Config", bg="red", command=Config)
 btn.place(x=700, y=400)
 
 
-btn2 = Button(root, text="RESET", bg="blue", command=Reset)
-btn2.place(x=600, y=400)
+#btn2 = Button(root, text="Dashboard", bg="blue", command=Dashboard)
+#btn2.place(x=600, y=400)
 
 btn4 = Button(root, text="clear", bg="blue", command=Clear)
 btn4.place(x=40, y=440)
 
 
 root.mainloop()
+hud.mainloop()
