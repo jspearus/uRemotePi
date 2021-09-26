@@ -5,15 +5,16 @@ import os
 import platform
 
 
-root = Tk()
 hud = Tk()
+root = Tk()
+
 
 root.configure(background='black')
 root.title("_Mantis_Blade_")
 root.geometry('800x480')
 
 hud.configure(background='black')
-hud.title("_Mantis_Blade_")
+hud.title("_Mantis_Blade_HUD")
 hud.geometry('600x300')
 
 
@@ -106,6 +107,9 @@ btn.place(x=700, y=400)
 
 btn4 = Button(root, text="clear", bg="blue", command=Clear)
 btn4.place(x=40, y=440)
+
+hudLabel = Label(hud, text="this is the hud")
+hudLabel.place(x=275, y=150)
 
 
 root.mainloop()
