@@ -15,7 +15,7 @@ root.geometry('800x480+0+0')
 
 hud.configure(background='black')
 hud.title("_Mantis_Blade_HUD")
-hud.geometry('600x300+800+0')
+hud.geometry('700x480+800+0')
 
 
 text = ""
@@ -34,9 +34,15 @@ def Config():
     textBox.insert(END, "Config")
     textBox.yview(END)
     my_frame.place_forget()
+    btn.place_forget()
     new_frame.place(x=40, y=60, width=300, height=200)
+<<<<<<< HEAD
     btn2.place(x=700, y=200)
     Display("Configuation ")
+=======
+    btn2.place(x=700, y=350)
+    Display("Configuration Menu")
+>>>>>>> 5997bd876c4245e462336cb9426608c653ad555a
 
 
 def Dashboard():
@@ -44,8 +50,13 @@ def Dashboard():
     textBox.yview(END)
     new_frame.place_forget()
     btn2.place_forget()
+    btn.place(x=700, y=350)
     my_frame.place(x=40, y=60)
+<<<<<<< HEAD
     Display("Dashboard      ")
+=======
+    Display("Dashboard                ")
+>>>>>>> 5997bd876c4245e462336cb9426608c653ad555a
 
 
 def Display(x):
@@ -55,17 +66,25 @@ def Display(x):
 
 def Clear():
     textBox.delete(0, END)
+<<<<<<< HEAD
     Display("Clear            ")
+=======
+    Display("Clear           ")
+>>>>>>> 5997bd876c4245e462336cb9426608c653ad555a
 
 
 def EXOhud():
     EXO_Stats.place(x=15, y=100)
     BAT_Stats.place_forget()
+    btn5.place(x=550, y=400)
+    btn6.place_forget()
 
 
 def BAThud():
     BAT_Stats.place(x=15, y=100)
     EXO_Stats.place_forget()
+    btn5.place_forget()
+    btn6.place(x=550, y=400)
 
 
 def Quit():
@@ -109,15 +128,16 @@ osLabel = Label(root, bg="DarkOrange2",
 osLabel.place(x=40, y=20)
 
 
-btn = Button(root, text="Config", bg="red", command=Config)
-btn.place(x=700, y=400)
+btn = Button(root, height=2, width=8,
+             text="Config", bg="red", command=Config)
+btn.place(x=700, y=350)
 
 
 btn5 = Button(root, text="HUD_bat View", bg="blue", command=BAThud)
 btn5.place(x=550, y=400)
 
 btn6 = Button(root, text="HUD_EXO View", bg="blue", command=EXOhud)
-btn6.place(x=550, y=330)
+
 
 btn4 = Button(root, text="clear", bg="blue", command=Clear)
 btn4.place(x=40, y=440)
