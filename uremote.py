@@ -36,13 +36,8 @@ def Config():
     my_frame.place_forget()
     btn.place_forget()
     new_frame.place(x=40, y=60, width=300, height=200)
-<<<<<<< HEAD
     btn2.place(x=700, y=200)
     Display("Configuation ")
-=======
-    btn2.place(x=700, y=350)
-    Display("Configuration Menu")
->>>>>>> 5997bd876c4245e462336cb9426608c653ad555a
 
 
 def Dashboard():
@@ -52,11 +47,7 @@ def Dashboard():
     btn2.place_forget()
     btn.place(x=700, y=350)
     my_frame.place(x=40, y=60)
-<<<<<<< HEAD
     Display("Dashboard      ")
-=======
-    Display("Dashboard                ")
->>>>>>> 5997bd876c4245e462336cb9426608c653ad555a
 
 
 def Display(x):
@@ -66,11 +57,7 @@ def Display(x):
 
 def Clear():
     textBox.delete(0, END)
-<<<<<<< HEAD
     Display("Clear            ")
-=======
-    Display("Clear           ")
->>>>>>> 5997bd876c4245e462336cb9426608c653ad555a
 
 
 def EXOhud():
