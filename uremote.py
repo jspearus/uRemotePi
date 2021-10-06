@@ -9,7 +9,7 @@ hud = Tk()
 root = Tk()
 
 
-root.configure(background='gray4')
+root.configure(background='gray40')
 root.title("_Mantis_Blade_")
 root.geometry('800x480+0+0')
 
@@ -40,8 +40,8 @@ def Config():
     my_frame.place_forget()
     btn.place_forget()
     new_frame.place(x=40, y=60, width=300, height=200)
-    btn2.place(x=700, y=350)
-    Display("Configuration Menu")
+    btn2.place(x=700, y=200)
+    Display("Configuation ")
 
 
 def Dashboard():
@@ -51,8 +51,7 @@ def Dashboard():
     btn2.place_forget()
     btn.place(x=700, y=350)
     my_frame.place(x=40, y=60)
-    Display("Dashboard                ")
-    port.write(str.encode("Dashboard#"))
+    Display("Dashboard      ")
 
 
 def Display(x):
@@ -62,7 +61,7 @@ def Display(x):
 
 def Clear():
     textBox.delete(0, END)
-    Display("Clear           ")
+    Display("Clear            ")
 
 
 def EXOhud():
