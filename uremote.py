@@ -21,13 +21,17 @@ hud.geometry('700x480+800+0')
 text = ""
 
 if platform.system() == "Linux":
-    port = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=3.0)
+    port = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=10)
     root.config(cursor="none")
     root.attributes('-fullscreen', True)
     hud.attributes('-fullscreen', True)
 elif platform.system() == "Windows":
-    #port = serial.Serial("COM7", baudrate=115200, timeout=3.0)
-    pass
+    try:
+        port = serial.Serial('COM10', baudrate=9600, timeout=10)
+        print("COM10 Connected")
+        port.write(str.encode("comm#"))
+    except serial.SerialException as e:
+        print("device not detected")
 
 
 def Config():
@@ -38,6 +42,7 @@ def Config():
     new_frame.place(x=40, y=60, width=300, height=200)
     btn2.place(x=700, y=350)
     Display("Configuation ")
+    port.write(str.encode("config#"))
 
 
 def Dashboard():
@@ -48,6 +53,7 @@ def Dashboard():
     btn.place(x=700, y=350)
     my_frame.place(x=40, y=60)
     Display("Dashboard      ")
+    port.write(str.encode("dash#"))
 
 
 def Display(x):
@@ -65,6 +71,7 @@ def EXOhud():
     BAT_Stats.place_forget()
     btn5.place(x=550, y=400)
     btn6.place_forget()
+    port.write(str.encode("EXO#"))
 
 
 def BAThud():
@@ -72,6 +79,7 @@ def BAThud():
     EXO_Stats.place_forget()
     btn5.place_forget()
     btn6.place(x=550, y=400)
+    port.write(str.encode("PowerManage#"))
 
 
 def Quit():
