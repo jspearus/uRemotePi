@@ -36,7 +36,7 @@ def Config():
     my_frame.place_forget()
     btn.place_forget()
     new_frame.place(x=40, y=60, width=300, height=200)
-    btn2.place(x=700, y=200)
+    btn2.place(x=700, y=350)
     Display("Configuation ")
 
 
@@ -103,7 +103,8 @@ secLabel = Label(new_frame, bg="grey", justify="left",
 newLabel.place(x=0, y=0)
 secLabel.place(x=30, y=100)
 
-btn2 = Button(root, text="Dashboard", bg="red", command=Dashboard)
+btn2 = Button(root, height=2, width=8, text="Dashboard",
+              bg="red", command=Dashboard)
 
 
 Btn3 = Button(root, text="Quit", bg="blue", command=Quit)
