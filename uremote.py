@@ -42,6 +42,7 @@ def Config():
     new_frame.place(x=40, y=60, width=300, height=200)
     btn2.place(x=700, y=200)
     Display("Configuation ")
+    port.write(str.encode("config#"))
 
 
 def Dashboard():
@@ -52,6 +53,7 @@ def Dashboard():
     btn.place(x=700, y=350)
     my_frame.place(x=40, y=60)
     Display("Dashboard      ")
+    port.write(str.encode("dash#"))
 
 
 def Display(x):
