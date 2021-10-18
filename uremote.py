@@ -35,6 +35,7 @@ if platform.system() == "Linux":
 
 
 elif platform.system() == "Windows":
+
     try:
         port = serial.Serial('COM10', baudrate=9600, timeout=10)
         print("COM10 Connected")
@@ -44,24 +45,18 @@ elif platform.system() == "Windows":
 
 
 def Config():
-    textBox.insert(END, "Config")
-    textBox.yview(END)
-    my_frame.place_forget()
+    Dash_view.place_forget()
     btn.place_forget()
-    new_frame.place(x=40, y=60, width=300, height=200)
+    Config_view.place(x=0, y=50)
     btn2.place(x=700, y=350)
-    Display("Configuation ")
     port.write(str.encode("config#"))
 
 
 def Dashboard():
-    textBox.insert(END, "Dashboard")
-    textBox.yview(END)
-    new_frame.place_forget()
+    Config_view.place_forget()
     btn2.place_forget()
     btn.place(x=700, y=350)
-    my_frame.place(x=40, y=60)
-    Display("Dashboard      ")
+    Dash_view.place(x=0, y=50)
     port.write(str.encode("dash#"))
 
 
@@ -85,7 +80,7 @@ def Clear():
 def EXOhud():
     EXO_Stats.place(x=850, y=100)
     BAT_Stats.place_forget()
-    btn5.place(x=550, y=380)
+    btn5.place(x=700, y=250)
     btn6.place_forget()
     port.write(str.encode("exov#"))
 
@@ -94,7 +89,7 @@ def BAThud():
     BAT_Stats.place(x=850, y=100)
     EXO_Stats.place_forget()
     btn5.place_forget()
-    btn6.place(x=550, y=380)
+    btn6.place(x=700, y=250)
     port.write(str.encode("ctrlt#"))
 
 
@@ -165,59 +160,124 @@ def serialRead():
 
 ################ MAIN DISPLAY #####################################
 # create frame and scrollbar
-my_frame = Frame(root)
+Dash_frame = Frame(root, bg="black")
 
-my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)
+Dash_view = LabelFrame(root, text="-Dashbord-", font=("Arial", 20),
+                       width=650, height=350, bd=5, bg="black", fg="orange")
+Dash_view.place(x=0, y=50)
+
+Config_view = LabelFrame(root, text="-Configuration-", font=("Arial", 20),
+                         width=650, height=350, bd=5, bg="black", fg="orange")
+
+Bat_view = LabelFrame(Dash_view, text="-PowerMGMT-",
+                      bg="black", fg="orange", height=225, width=300)
+Bat_view.place(x=300, y=75)
+
+dBat = Label(Bat_view, text="Drive_pwr = 16.4 V",
+             bg="black", fg="white", font=("Arial", 15))
+dBat.place(x=7, y=5)
+
+dBat1 = Label(Bat_view, text="Cell_1 = Good",
+              bg="black", fg="white", font=("Arial", 10))
+dBat1.place(x=12, y=30)
+
+dBat2 = Label(Bat_view, text="Cell_2 = Good",
+              bg="black", fg="white", font=("Arial", 10))
+dBat2.place(x=12, y=50)
+
+dBat3 = Label(Bat_view, text="Cell_3 = Good",
+              bg="black", fg="white", font=("Arial", 10))
+dBat3.place(x=12, y=70)
+
+dBat4 = Label(Bat_view, text="Cell_4 = Good",
+              bg="black", fg="white", font=("Arial", 10))
+dBat4.place(x=12, y=90)
+
+dBat_t = Label(Bat_view, text="DBat Temp = 25 C",
+               bg="black", fg="white", font=("Arial", 12))
+dBat_t.place(x=115, y=60)
+
+cBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
+             bg="black", fg="white", font=("Arial", 17))
+cBat.place(x=42, y=135)
+
+cBata = Label(Bat_view, text="CTRL_pwr = LOW",
+              bg="black", fg="white", font=("Arial", 17))
+
+cBat_t = Label(Bat_view, text="CBat Temp = 20 C",
+               bg="black", fg="white", font=("Arial", 20))
+cBat_t.place(x=45, y=165)
 
 
-textBox = Listbox(my_frame, bg="blue", width=40, height=20,
-                  justify="left", yscrollcommand=my_scrollbar.set)
+cMode = Label(Dash_view, text=serBuffer,
+              bg="red", fg="black", font=("Arial", 20))
+cMode.place(x=20, y=15)
 
-# config scrollar
-my_scrollbar.config(command=textBox.yview)
-my_scrollbar.pack(side=RIGHT, fill=Y)
-my_frame.place(x=40, y=60)
-textBox.pack()
+bladePos = Label(Dash_view, text="Mode = Safe", bg="black",
+                 fg="orange", font=("Arial", 15))
+bladePos.place(x=20, y=85)
+################CONFIG VIEW DASH###############################
+bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
+                 fg="white", font=("Arial", 20))
+bladePOS.place(x=50, y=20)
 
-new_frame = Frame(root, bg="snow")
+safebtn = Button(Config_view, text="Safe", height=3,
+                 width=10, bg="orange", fg="black", font=("Arial", 10))
+safebtn.place(x=525, y=60)
 
-newLabel = Label(new_frame, bg="Orange", justify="left",
-                 text=serBuffer)
-secLabel = Label(new_frame, bg="black", justify="left",
-                 text='this is a new test')
+syncbtn = Button(Config_view, text="Sync", height=3,
+                 width=10, bg="orange", fg="black", font=("Arial", 10))
+syncbtn.place(x=525, y=150)
+
+holdbtn = Button(Config_view, text="Hold", height=3,
+                 width=10, bg="orange", fg="black", font=("Arial", 10))
+holdbtn.place(x=525, y=240)
+
+PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 25),
+                      width=250, height=200, bd=5, bg="black", fg="orange")
+PID_view.place(x=50, y=75)
+
+P_val = Label(PID_view, text="P = 4", bg="black",
+              fg="white", font=("Arial", 20))
+P_val.place(x=8, y=20)
+I_val = Label(PID_view, text="I = 1", bg="black",
+              fg="white", font=("Arial", 20))
+I_val.place(x=8, y=65)
+D_val = Label(PID_view, text="D = 1", bg="black",
+              fg="white", font=("Arial", 20))
+D_val.place(x=8, y=110)
 
 serLabel = Label(root, bg="black", fg="red", justify="left",
                  text='serial status   ')
-newLabel.place(x=0, y=0)
-secLabel.place(x=30, y=100)
-serLabel.place(x=450, y=200)
+serLabel.place(x=450, y=100)
 
-btn2 = Button(root, height=2, width=8, text="Dashboard",
+btn2 = Button(root, height=3, width=12, text="Dashboard",
               bg="red", command=Dashboard)
 
 
 Btn3 = Button(root, text="Quit", bg="blue", command=Quit)
 Btn3.place(x=700, y=10)
 
-
-osLabel = Label(root, bg="DarkOrange2",
-                text="OS Detected: " + platform.system())
+osLabel = Label(root, bg="DarkOrange2")
 osLabel.place(x=40, y=20)
+if platform.system() == "Linux":
+    osLabel.config(text="Device: M.A.N.T.I.S. Blade")
+
+elif platform.system() == "Windows":
+    osLabel.config(text="Device: PC")
 
 
-btn = Button(root, height=2, width=8,
+btn = Button(root, height=3, width=12,
              text="Config", bg="red", command=Config)
 btn.place(x=700, y=350)
 
 
-btn5 = Button(root, text="HUD_bat View", bg="blue", command=BAThud)
-btn5.place(x=550, y=380)
+btn5 = Button(root, text="HUD_bat \nView", height=3,
+              width=12, bg="blue", command=BAThud)
+btn5.place(x=700, y=250)
 
-btn6 = Button(root, text="HUD_EXO View", bg="blue", command=EXOhud)
-
-
-btn4 = Button(root, text="clear", bg="blue", command=Clear)
-btn4.place(x=40, y=440)
+btn6 = Button(root, text="HUD_EXO \nView", height=3,
+              width=12, bg="blue", command=EXOhud)
 
 
 ######################### HUD WIDGETS ############################
