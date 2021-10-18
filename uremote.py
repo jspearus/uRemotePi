@@ -19,6 +19,7 @@ root.geometry('2080x730+0+0')
 
 text = ""
 serBuffer = "Mode = Armed"
+comData = ""
 mynum = 0
 Stop_t = False
 
@@ -72,11 +73,6 @@ def alert(x):
     cBata.place(x=375, y=370)
 
 
-def Clear():
-    textBox.delete(0, END)
-    Display("Clear            ")
-
-
 def EXOhud():
     EXO_Stats.place(x=850, y=100)
     BAT_Stats.place_forget()
@@ -97,6 +93,10 @@ def Quit():
     global Stop_t
     Stop_t = True
     root.destroy()
+
+
+def SerialOut(com):
+    port.write(com)
 
 
 def serialRead():
@@ -222,15 +222,15 @@ bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
 bladePOS.place(x=50, y=20)
 
 safebtn = Button(Config_view, text="Safe", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10))
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeS#"))
 safebtn.place(x=525, y=60)
 
 syncbtn = Button(Config_view, text="Sync", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10))
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modes#"))
 syncbtn.place(x=525, y=150)
 
 holdbtn = Button(Config_view, text="Hold", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10))
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
 holdbtn.place(x=525, y=240)
 
 PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 25),
@@ -247,37 +247,41 @@ D_val = Label(PID_view, text="D = 1", bg="black",
               fg="white", font=("Arial", 20))
 D_val.place(x=8, y=110)
 
-serLabel = Label(root, bg="black", fg="red", justify="left",
+serLabel = Label(root, bg="black", fg="white", font=("Arial", 15), justify="left",
                  text='serial status   ')
 serLabel.place(x=450, y=100)
 
 btn2 = Button(root, height=3, width=12, text="Dashboard",
-              bg="red", command=Dashboard)
+              bg="DarkOrange2", command=Dashboard)
 
 
-Btn3 = Button(root, text="Quit", bg="blue", command=Quit)
+Btn3 = Button(root, text="Quit", bg="DarkOrange2", command=Quit)
 Btn3.place(x=700, y=10)
 
-osLabel = Label(root, bg="DarkOrange2")
+osLabel = Label(root, bg="DarkOrange2", fg="white", font=(
+    "Arial", 10), height=1, width=75, justify="left")
 osLabel.place(x=40, y=20)
+
 if platform.system() == "Linux":
-    osLabel.config(text="Device: M.A.N.T.I.S. Blade")
+    osLabel.config(
+        text="Device: M.A.N.T.I.S. Blade                                                                                 ", justify="left")
 
 elif platform.system() == "Windows":
-    osLabel.config(text="Device: PC")
+    osLabel.config(
+        text="Device: PC                                                                                 ")
 
 
 btn = Button(root, height=3, width=12,
-             text="Config", bg="red", command=Config)
+             text="Config", bg="DarkOrange2", command=Config)
 btn.place(x=700, y=350)
 
 
 btn5 = Button(root, text="HUD_bat \nView", height=3,
-              width=12, bg="blue", command=BAThud)
+              width=12, bg="DarkOrange2", command=BAThud)
 btn5.place(x=700, y=250)
 
 btn6 = Button(root, text="HUD_EXO \nView", height=3,
-              width=12, bg="blue", command=EXOhud)
+              width=12, bg="DarkOrange2", command=EXOhud)
 
 
 ######################### HUD WIDGETS ############################
@@ -323,38 +327,38 @@ BAT_Stats = LabelFrame(root, text=" BAT_Stats ", font=("Arial", 50),
 # BAT_Stats.place(x=20, y=100)
 
 dBat = Label(BAT_Stats, text="Drive_pwr = 100 %",
-             bg="black", fg="red", font=("Arial", 30))
+             bg="black", fg="DarkOrange2", font=("Arial", 30))
 dBat.place(x=20, y=15)
 
 dBat1 = Label(BAT_Stats, text="Cell_1 = 4.1v",
-              bg="black", fg="red", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 25))
 dBat1.place(x=40, y=85)
 
 dBat2 = Label(BAT_Stats, text="Cell_2 = 4.1v",
-              bg="black", fg="red", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 25))
 dBat2.place(x=40, y=135)
 
 dBat3 = Label(BAT_Stats, text="Cell_3 = 4.1v",
-              bg="black", fg="red", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 25))
 dBat3.place(x=40, y=190)
 
 dBat4 = Label(BAT_Stats, text="Cell_4 = 4.1v",
-              bg="black", fg="red", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 25))
 dBat4.place(x=40, y=250)
 
 dBat_t = Label(BAT_Stats, text="DBat Temp = 25 C",
-               bg="black", fg="red", font=("Arial", 40))
+               bg="black", fg="DarkOrange2", font=("Arial", 40))
 dBat_t.place(x=140, y=300)
 
 cBat = Label(BAT_Stats, text="CTRL_pwr = LOW",
-             bg="black", fg="red", font=("Arial", 30))
+             bg="black", fg="DarkOrange2", font=("Arial", 30))
 cBat.place(x=375, y=370)
 
 cBata = Label(BAT_Stats, text="CTRL_pwr = LOW",
               bg="black", fg="red", font=("Arial", 30))
 
 cBat_t = Label(BAT_Stats, text="CBat Temp = 20 C",
-               bg="black", fg="red", font=("Arial", 40))
+               bg="black", fg="DarkOrange2", font=("Arial", 40))
 cBat_t.place(x=400, y=425)
 
 serial = threading.Thread(target=serialRead, args=())
