@@ -116,12 +116,18 @@ def serialRead():
 
         elif b'mode = 0' in data[0]:
             bladePos.config(text='Mode = Safe')
+            bladePOS.config(text='Mode = Safe')
+            BladePos.config(text='Mode = Safe')
 
         elif b'mode = 1' in data[0]:
             bladePos.config(text='Mode = Sync')
+            bladePOS.config(text='Mode = Sync')
+            BladePos.config(text='Mode = Sync')
 
         elif b'mode = 2' in data[0]:
             bladePos.config(text='Mode = Hold')
+            bladePOS.config(text='Mode = Hold')
+            BladePos.config(text='Mode = Hold')
 
         elif b'Ctrl Bat Temp' in data[0]:
             cBat_t.config(text=data[0])
@@ -131,6 +137,7 @@ def serialRead():
 
         elif b'Drv_Pwr' in data[0]:
             dBat.config(text=data[0])
+            DBat.config(text=data[0])
 
         elif b'Ctrl Bat V' in data[0]:
             cBat.config(text=data[0])
@@ -173,49 +180,49 @@ Bat_view = LabelFrame(Dash_view, text="-PowerMGMT-",
                       bg="black", fg="orange", height=225, width=300)
 Bat_view.place(x=300, y=75)
 
-dBat = Label(Bat_view, text="Drive_pwr = 16.4 V",
+DBat = Label(Bat_view, text="Drive_pwr = 16.4 V",
              bg="black", fg="white", font=("Arial", 15))
-dBat.place(x=7, y=5)
+DBat.place(x=7, y=5)
 
-dBat1 = Label(Bat_view, text="Cell_1 = Good",
+DBat1 = Label(Bat_view, text="Cell_1 = Good",
               bg="black", fg="white", font=("Arial", 10))
-dBat1.place(x=12, y=30)
+DBat1.place(x=12, y=30)
 
-dBat2 = Label(Bat_view, text="Cell_2 = Good",
+DBat2 = Label(Bat_view, text="Cell_2 = Good",
               bg="black", fg="white", font=("Arial", 10))
-dBat2.place(x=12, y=50)
+DBat2.place(x=12, y=50)
 
-dBat3 = Label(Bat_view, text="Cell_3 = Good",
+DBat3 = Label(Bat_view, text="Cell_3 = Good",
               bg="black", fg="white", font=("Arial", 10))
-dBat3.place(x=12, y=70)
+DBat3.place(x=12, y=70)
 
-dBat4 = Label(Bat_view, text="Cell_4 = Good",
+DBat4 = Label(Bat_view, text="Cell_4 = Good",
               bg="black", fg="white", font=("Arial", 10))
-dBat4.place(x=12, y=90)
+DBat4.place(x=12, y=90)
 
-dBat_t = Label(Bat_view, text="DBat Temp = 25 C",
+DBat_t = Label(Bat_view, text="DBat Temp = 25 C",
                bg="black", fg="white", font=("Arial", 12))
-dBat_t.place(x=115, y=60)
+DBat_t.place(x=115, y=60)
 
-cBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
+DBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
              bg="black", fg="white", font=("Arial", 17))
-cBat.place(x=42, y=135)
+DBat.place(x=42, y=135)
 
-cBata = Label(Bat_view, text="CTRL_pwr = LOW",
+DBata = Label(Bat_view, text="CTRL_pwr = LOW",
               bg="black", fg="white", font=("Arial", 17))
 
-cBat_t = Label(Bat_view, text="CBat Temp = 20 C",
+DBat_t = Label(Bat_view, text="CBat Temp = 20 C",
                bg="black", fg="white", font=("Arial", 20))
-cBat_t.place(x=45, y=165)
+DBat_t.place(x=45, y=165)
 
 
 cMode = Label(Dash_view, text=serBuffer,
               bg="red", fg="black", font=("Arial", 20))
 cMode.place(x=20, y=15)
 
-bladePos = Label(Dash_view, text="Mode = Safe", bg="black",
+BladePos = Label(Dash_view, text="Mode = Safe", bg="black",
                  fg="orange", font=("Arial", 15))
-bladePos.place(x=20, y=85)
+BladePos.place(x=20, y=85)
 ################CONFIG VIEW DASH###############################
 bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
                  fg="white", font=("Arial", 20))
