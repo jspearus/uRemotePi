@@ -103,7 +103,7 @@ def SerialOut(com):
 
 def serialRead():
     global serBuffer
-    serLabel.config(text="Serial Port Open")
+    serLabel.config(text="Device not Connected...")
     while True:
         data = port.readline()
         data = data.split(b"\r")
@@ -215,7 +215,7 @@ DBat4.place(x=12, y=90)
 
 DBat_t = Label(Bat_view, text="DBat Temp = 25 C",
                bg="black", fg="white", font=("Arial", 11))
-DBat_t.place(x=120, y=60)
+DBat_t.place(x=130, y=60)
 
 CBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
              bg="black", fg="white", font=("Arial", 15))
@@ -347,32 +347,32 @@ BAT_Stats = LabelFrame(root, text=" BAT_Stats ", font=("Arial", 50),
 # BAT_Stats.place(x=20, y=100)
 
 dBat = Label(BAT_Stats, text="Drive_pwr = 100 %",
-             bg="black", fg="DarkOrange2", font=("Arial", 30))
+             bg="black", fg="DarkOrange2", font=("Arial", 32))
 dBat.place(x=20, y=15)
 
 dBat1 = Label(BAT_Stats, text="Cell_1 = 4.1v",
-              bg="black", fg="white", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 28))
 dBat1.place(x=40, y=85)
 
 dBat2 = Label(BAT_Stats, text="Cell_2 = 4.1v",
-              bg="black", fg="white", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 28))
 dBat2.place(x=40, y=135)
 
 dBat3 = Label(BAT_Stats, text="Cell_3 = 4.1v",
-              bg="black", fg="white", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 28))
 dBat3.place(x=40, y=190)
 
 dBat4 = Label(BAT_Stats, text="Cell_4 = 4.1v",
-              bg="black", fg="white", font=("Arial", 25))
+              bg="black", fg="white", font=("Arial", 28))
 dBat4.place(x=40, y=250)
 
 dBat_t = Label(BAT_Stats, text="DBat Temp = 25 C",
                bg="black", fg="DarkOrange2", font=("Arial", 40))
-dBat_t.place(x=140, y=300)
+dBat_t.place(x=400, y=150)
 
 cBat = Label(BAT_Stats, text="CTRL_pwr = LOW",
              bg="black", fg="DarkOrange2", font=("Arial", 30))
-cBat.place(x=375, y=370)
+cBat.place(x=400, y=370)
 
 cBata = Label(BAT_Stats, text="CTRL_pwr = LOW",
               bg="black", fg="red", font=("Arial", 30))
