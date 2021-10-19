@@ -49,14 +49,14 @@ def Config():
     Dash_view.place_forget()
     btn.place_forget()
     Config_view.place(x=0, y=50)
-    btn2.place(x=700, y=350)
+    btn2.place(x=675, y=350)
     port.write(str.encode("config#"))
 
 
 def Dashboard():
     Config_view.place_forget()
     btn2.place_forget()
-    btn.place(x=700, y=350)
+    btn.place(x=675, y=350)
     Dash_view.place(x=0, y=50)
     port.write(str.encode("dash#"))
 
@@ -67,16 +67,18 @@ def Display(x):
 
 
 def alert(x):
+    Dashboard()
     alertLabel = Label(root, bg="red", font=("Arial", 40), text=x)
     alertLabel.place(x=400, y=200)
     BAThud()
     cBata.place(x=375, y=370)
+    CBata.place(x=375, y=370)
 
 
 def EXOhud():
     EXO_Stats.place(x=850, y=100)
     BAT_Stats.place_forget()
-    btn5.place(x=700, y=250)
+    btn5.place(x=675, y=250)
     btn6.place_forget()
     port.write(str.encode("exov#"))
 
@@ -85,7 +87,7 @@ def BAThud():
     BAT_Stats.place(x=850, y=100)
     EXO_Stats.place_forget()
     btn5.place_forget()
-    btn6.place(x=700, y=250)
+    btn6.place(x=675, y=250)
     port.write(str.encode("ctrlt#"))
 
 
@@ -105,13 +107,17 @@ def serialRead():
     while True:
         data = port.readline()
         data = data.split(b"\r")
-        serLabel.config(text=data[0])
-        if b'config' in data[0]:
+        # serLabel.config(text=data[0])
+        if b'MANTIS' in data[0]:
+            serLabel.config(text="M.A.N.T.I.S. Blade Detected")
+        elif b'config' in data[0]:
             cMode.config(text='Config Mode')
+            CMode.config(text='Config Mode')
             EXOhud()
 
         elif b'armed' in data[0]:
             cMode.config(text='System Armed')
+            CMode.config(text='System Armed')
             EXOhud()
 
         elif b'mode = 0' in data[0]:
@@ -131,9 +137,11 @@ def serialRead():
 
         elif b'Ctrl Bat Temp' in data[0]:
             cBat_t.config(text=data[0])
+            CBat_t.config(text=data[0])
 
         elif b'Drv Bat Temp' in data[0]:
             dBat_t.config(text=data[0])
+            DBat_t.config(text=data[0])
 
         elif b'Drv_Pwr' in data[0]:
             dBat.config(text=data[0])
@@ -141,18 +149,23 @@ def serialRead():
 
         elif b'Ctrl Bat V' in data[0]:
             cBat.config(text=data[0])
+            CBat.config(text=data[0])
 
         elif b'Cell 1 Status' in data[0]:
             dBat1.config(text=data[0])
+            DBat1.config(text=data[0])
 
         elif b'Cell 2 Status' in data[0]:
             dBat2.config(text=data[0])
+            DBat2.config(text=data[0])
 
         elif b'Cell 3 Status' in data[0]:
             dBat3.config(text=data[0])
+            DBat3.config(text=data[0])
 
         elif b'Cell 4 Status' in data[0]:
             dBat4.config(text=data[0])
+            DBat4.config(text=data[0])
 
         elif b'ctrlblow' in data[0]:
             alert('Ctrl Bat V Low')
@@ -171,7 +184,7 @@ Dash_frame = Frame(root, bg="black")
 
 Dash_view = LabelFrame(root, text="-Dashbord-", font=("Arial", 20),
                        width=650, height=350, bd=5, bg="black", fg="orange")
-Dash_view.place(x=0, y=50)
+Dash_view.place(x=2, y=50)
 
 Config_view = LabelFrame(root, text="-Configuration-", font=("Arial", 20),
                          width=650, height=350, bd=5, bg="black", fg="orange")
@@ -201,24 +214,24 @@ DBat4 = Label(Bat_view, text="Cell_4 = Good",
 DBat4.place(x=12, y=90)
 
 DBat_t = Label(Bat_view, text="DBat Temp = 25 C",
-               bg="black", fg="white", font=("Arial", 12))
-DBat_t.place(x=115, y=60)
+               bg="black", fg="white", font=("Arial", 11))
+DBat_t.place(x=120, y=60)
 
-DBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
-             bg="black", fg="white", font=("Arial", 17))
-DBat.place(x=42, y=135)
+CBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
+             bg="black", fg="white", font=("Arial", 15))
+CBat.place(x=42, y=135)
 
-DBata = Label(Bat_view, text="CTRL_pwr = LOW",
+CBata = Label(Bat_view, text="CTRL_pwr = LOW",
               bg="black", fg="white", font=("Arial", 17))
 
-DBat_t = Label(Bat_view, text="CBat Temp = 20 C",
-               bg="black", fg="white", font=("Arial", 20))
-DBat_t.place(x=45, y=165)
+CBat_t = Label(Bat_view, text="CBat Temp = 20 C",
+               bg="black", fg="white", font=("Arial", 17))
+CBat_t.place(x=45, y=165)
 
 
-cMode = Label(Dash_view, text=serBuffer,
+CMode = Label(Dash_view, text=serBuffer,
               bg="red", fg="black", font=("Arial", 20))
-cMode.place(x=20, y=15)
+CMode.place(x=20, y=15)
 
 BladePos = Label(Dash_view, text="Mode = Safe", bg="black",
                  fg="orange", font=("Arial", 15))
@@ -254,11 +267,11 @@ D_val = Label(PID_view, text="D = 1", bg="black",
               fg="white", font=("Arial", 20))
 D_val.place(x=8, y=110)
 
-serLabel = Label(root, bg="black", fg="white", font=("Arial", 15), justify="left",
+serLabel = Label(root, bg="black", fg="DarkOrange2", font=("Arial", 15), justify="left",
                  text='serial status   ')
-serLabel.place(x=450, y=100)
+serLabel.place(x=350, y=100)
 
-btn2 = Button(root, height=3, width=12, text="Dashboard",
+btn2 = Button(root, height=3, width=10, text="Dashboard",
               bg="DarkOrange2", command=Dashboard)
 
 
@@ -278,17 +291,17 @@ elif platform.system() == "Windows":
         text="Device: PC                                                                                 ")
 
 
-btn = Button(root, height=3, width=12,
+btn = Button(root, height=3, width=10,
              text="Config", bg="DarkOrange2", command=Config)
-btn.place(x=700, y=350)
+btn.place(x=675, y=350)
 
 
 btn5 = Button(root, text="HUD_bat \nView", height=3,
-              width=12, bg="DarkOrange2", command=BAThud)
-btn5.place(x=700, y=250)
+              width=10, bg="DarkOrange2", command=BAThud)
+btn5.place(x=675, y=250)
 
 btn6 = Button(root, text="HUD_EXO \nView", height=3,
-              width=12, bg="DarkOrange2", command=EXOhud)
+              width=10, bg="DarkOrange2", command=EXOhud)
 
 
 ######################### HUD WIDGETS ############################
