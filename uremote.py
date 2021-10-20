@@ -105,76 +105,59 @@ def serialRead():
     global serBuffer
     serLabel.config(text="Device not Connected...")
     while True:
-        data = port.readline()
-        data = data.split(b"\r")
+        Data = port.readline()
+        Data = str(Data, 'UTF-8')
+        data = Data.split(',')
         # serLabel.config(text=data[0])
-        if b'MANTIS' in data[0]:
+        if 'MANTIS' in data[0]:
             serLabel.config(text="M.A.N.T.I.S. Blade Detected")
-        elif b'config' in data[0]:
+        elif 'config' in data[0]:
             cMode.config(text='Config Mode')
             CMode.config(text='Config Mode')
             EXOhud()
 
-        elif b'armed' in data[0]:
+        elif 'armed' in data[0]:
             cMode.config(text='System Armed')
             CMode.config(text='System Armed')
             EXOhud()
 
-        elif b'mode = 0' in data[0]:
+        elif 'mode = 0' in data[0]:
             bladePos.config(text='Mode = Safe')
             bladePOS.config(text='Mode = Safe')
             BladePos.config(text='Mode = Safe')
 
-        elif b'mode = 1' in data[0]:
+        elif 'mode = 1' in data[0]:
             bladePos.config(text='Mode = Sync')
             bladePOS.config(text='Mode = Sync')
             BladePos.config(text='Mode = Sync')
 
-        elif b'mode = 2' in data[0]:
+        elif 'mode = 2' in data[0]:
             bladePos.config(text='Mode = Hold')
             bladePOS.config(text='Mode = Hold')
             BladePos.config(text='Mode = Hold')
 
-        elif b'stat' in data[0]:
-            dBat.config(text=data[1])
-            DBat.config(text=data[1])
+        elif 'stat' in data[0]:
+            dBat.config(text='Drv_Pwr = ' + data[1]+' V')
+            DBat.config(text='Drv_Pwr = ' + data[1]+' V')
+            dBat_t.config(text='Drv_Temp = ' + data[2]+' C')
+            DBat_t.config(text='Drv_Temp = ' + data[2]+' C')
+            dBat1.config(text='C_1_Status = ' + data[3])
+            DBat1.config(text='C_1_Status = ' + data[3])
+            dBat2.config(text='C_2_Status = ' + data[4])
+            DBat2.config(text='C_2_Status = ' + data[4])
+            dBat3.config(text='C_3_Status = ' + data[5])
+            DBat3.config(text='C_3_Status = ' + data[5])
+            dBat4.config(text='C_4_Status = ' + data[6])
+            DBat4.config(text='C_4_Status = ' + data[6])
+            cBat.config(text='Ctrl_V = ' + data[7]+' V')
+            CBat.config(text='Ctrl_V = ' + data[7]+' V')
+            cBat_t.config(text='Ctrl_Temp = ' + data[8]+' C')
+            CBat_t.config(text='Ctrl_Temp = ' + data[8]+' C')
 
-        elif b'Ctrl Bat Temp' in data[0]:
-            cBat_t.config(text=data[0])
-            CBat_t.config(text=data[0])
-
-        elif b'Drv Bat Temp' in data[0]:
-            dBat_t.config(text=data[0])
-            DBat_t.config(text=data[0])
-
-        elif b'Drv_Pwr' in data[0]:
-            dBat.config(text=data[0])
-            DBat.config(text=data[0])
-
-        elif b'Ctrl Bat V' in data[0]:
-            cBat.config(text=data[0])
-            CBat.config(text=data[0])
-
-        elif b'Cell 1 Status' in data[0]:
-            dBat1.config(text=data[0])
-            DBat1.config(text=data[0])
-
-        elif b'Cell 2 Status' in data[0]:
-            dBat2.config(text=data[0])
-            DBat2.config(text=data[0])
-
-        elif b'Cell 3 Status' in data[0]:
-            dBat3.config(text=data[0])
-            DBat3.config(text=data[0])
-
-        elif b'Cell 4 Status' in data[0]:
-            dBat4.config(text=data[0])
-            DBat4.config(text=data[0])
-
-        elif b'ctrlblow' in data[0]:
+        elif 'ctrlblow' in data[0]:
             alert('Ctrl Bat V Low')
 
-        elif b'alert' in data[0]:
+        elif 'alert' in data[0]:
             alert('Drive Bat V Low')
         data = ''
         time.sleep(.2)
