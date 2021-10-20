@@ -76,7 +76,7 @@ def alert(x):
 
 
 def EXOhud():
-    EXO_Stats.place(x=850, y=100)
+    EXO_Stats.place(x=900, y=100)
     BAT_Stats.place_forget()
     btn5.place(x=675, y=250)
     btn6.place_forget()
@@ -84,7 +84,7 @@ def EXOhud():
 
 
 def BAThud():
-    BAT_Stats.place(x=850, y=100)
+    BAT_Stats.place(x=900, y=100)
     EXO_Stats.place_forget()
     btn5.place_forget()
     btn6.place(x=675, y=250)
@@ -134,6 +134,10 @@ def serialRead():
             bladePos.config(text='Mode = Hold')
             bladePOS.config(text='Mode = Hold')
             BladePos.config(text='Mode = Hold')
+
+        elif b'stat' in data[0]:
+            dBat.config(text=data[1])
+            DBat.config(text=data[1])
 
         elif b'Ctrl Bat Temp' in data[0]:
             cBat_t.config(text=data[0])
@@ -257,10 +261,10 @@ PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 25),
                       width=250, height=200, bd=5, bg="black", fg="orange")
 PID_view.place(x=50, y=75)
 
-P_val = Label(PID_view, text="P = 4", bg="black",
+P_val = Label(PID_view, text="P = 3.5", bg="black",
               fg="white", font=("Arial", 20))
 P_val.place(x=8, y=20)
-I_val = Label(PID_view, text="I = 1", bg="black",
+I_val = Label(PID_view, text="I = 1.0", bg="black",
               fg="white", font=("Arial", 20))
 I_val.place(x=8, y=65)
 D_val = Label(PID_view, text="D = 1", bg="black",
@@ -309,13 +313,13 @@ btn6 = Button(root, text="HUD_EXO \nView", height=3,
 
 hudLabel = Label(root, text="HUD view", font=(
     "Arial", 30),  bg="black", fg="orange")
-hudLabel.place(x=850, y=20)
+hudLabel.place(x=900, y=20)
 
 #################### HUD EXO FRAME ###############################
 
 EXO_Stats = LabelFrame(root, text=" EXO_Stats ", font=("Arial", 50),
                        width=1000, height=600, bd=15, bg="black", fg="orange")
-EXO_Stats.place(x=850, y=100)
+EXO_Stats.place(x=900, y=100)
 
 cMode = Label(EXO_Stats, text=serBuffer,
               bg="red", fg="black", font=("Arial", 40))
@@ -329,10 +333,10 @@ PID_Config = LabelFrame(EXO_Stats, text=" PID_Config ", font=("Arial", 35),
                         width=350, height=300, bd=10, bg="black", fg="orange")
 PID_Config.place(x=400, y=150)
 
-P_val = Label(PID_Config, text="P = 4", bg="black",
+P_val = Label(PID_Config, text="P = 3.5", bg="black",
               fg="white", font=("Arial", 30))
 P_val.place(x=8, y=20)
-I_val = Label(PID_Config, text="I = 1", bg="black",
+I_val = Label(PID_Config, text="I = 1.0", bg="black",
               fg="white", font=("Arial", 30))
 I_val.place(x=8, y=65)
 D_val = Label(PID_Config, text="D = 1", bg="black",
