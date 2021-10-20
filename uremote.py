@@ -149,10 +149,10 @@ def serialRead():
             DBat3.config(text='C_3_Status = ' + data[5])
             dBat4.config(text='C_4_Status = ' + data[6])
             DBat4.config(text='C_4_Status = ' + data[6])
-            cBat.config(text='Ctrl_V = ' + data[7]+' V')
-            CBat.config(text='Ctrl_V = ' + data[7]+' V')
-            cBat_t.config(text='Ctrl_Temp = ' + data[8]+' C')
-            CBat_t.config(text='Ctrl_Temp = ' + data[8]+' C')
+            cBat.config(text='Ctrl_V = ' + data[8]+' V')
+            CBat.config(text='Ctrl_V = ' + data[8]+' V')
+            cBat_t.config(text='Ctrl_Temp = ' + data[7]+' C')
+            CBat_t.config(text='Ctrl_Temp = ' + data[7]+' C')
 
         elif 'ctrlblow' in data[0]:
             alert('Ctrl Bat V Low')
