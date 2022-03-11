@@ -1,24 +1,67 @@
 #! /usr/bin/python3
 
 from tkinter import *
-import serial
 import time
 import os
 import platform
 import threading
+import socket
 
-from serial.serialutil import Timeout
+HEADER = 64
+PORT = 5000
+FORMAT = 'utf-8'
+DISCONNECT_MESSAGE = "!DISCONNECT"
+SERVER = "dgscore.ddns.net"
+ADDR = (SERVER, PORT)
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(ADDR)
+DataIn = ''
+connected = True
+
+
+def send(msg):
+    message = msg.encode(FORMAT)
+    msg_length = len(message)
+    send_length = str(msg_length).encode(FORMAT)
+    send_length += b' ' * (HEADER - len(send_length))
+    client.send(send_length)
+    client.send(message)
+    # print(client.recv(2048).decode(FORMAT))
+
+
+def SocketIn():
+    global DataIn
+    global connected
+    print('listening...')
+    while connected:
+        DataIn = client.recv(2048).decode(FORMAT)
+        if not DataIn:
+            break
+        print(DataIn)
+        ####################### COMMANDS ##################
+        if DataIn == 'test1':
+            bladePOS.config(text='test Rec...')
+        DataIn = ''
+        time.sleep(.5)
+
+
+with open('/home/pi/uRemotePi/name.txt') as f:
+    name = f.readline()
+    send(name)
+    print(f"Connected as: {name}")
+    send('site, devices')
 
 
 root = Tk()
 
 
 root.configure(background='black')
-root.title("_Mantis_Blade_")
+root.title("_Rover Remote_")
 root.geometry('2080x730+0+0')
 
 text = ""
-serBuffer = "Mode = Armed"
+serBuffer = "System Online"
 comData = ""
 mynum = 0
 Stop_t = False
@@ -27,22 +70,10 @@ if platform.system() == "Linux":
     os.system('xinput map-to-output 6 HDMI-1')
     root.config(cursor="none")
     root.attributes('-fullscreen', False)
-    try:
-        port = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=10)
-        port.write(str.encode("comm#"))
-        port.write(str.encode("comm#"))
-    except serial.SerialException as e:
-        print("device not detected")
 
 
 elif platform.system() == "Windows":
-
-    try:
-        port = serial.Serial('COM10', baudrate=9600, timeout=10)
-        print("COM10 Connected")
-        port.write(str.encode("comm#"))
-    except serial.SerialException as e:
-        print("device not detected")
+    pass
 
 
 def Config():
@@ -50,7 +81,6 @@ def Config():
     btn.place_forget()
     Config_view.place(x=0, y=50)
     btn2.place(x=675, y=350)
-    port.write(str.encode("config#"))
 
 
 def Dashboard():
@@ -58,7 +88,6 @@ def Dashboard():
     btn2.place_forget()
     btn.place(x=675, y=350)
     Dash_view.place(x=0, y=50)
-    port.write(str.encode("dash#"))
 
 
 def Display(x):
@@ -80,7 +109,6 @@ def EXOhud():
     BAT_Stats.place_forget()
     btn5.place(x=675, y=250)
     btn6.place_forget()
-    port.write(str.encode("exov#"))
 
 
 def BAThud():
@@ -88,81 +116,16 @@ def BAThud():
     EXO_Stats.place_forget()
     btn5.place_forget()
     btn6.place(x=675, y=250)
-    port.write(str.encode("ctrlt#"))
 
 
 def Quit():
+    global connected
+    send(DISCONNECT_MESSAGE)
+    time.sleep(1)
+    connected = False
     global Stop_t
     Stop_t = True
     root.destroy()
-
-
-def SerialOut(com):
-    port.write(com)
-
-
-def serialRead():
-    global serBuffer
-    serLabel.config(text="Device not Connected...")
-    while True:
-        Data = port.readline()
-        Data = str(Data, 'UTF-8')
-        data = Data.split(',')
-        # serLabel.config(text=data[0])
-        if 'MANTIS' in data[0]:
-            serLabel.config(text="M.A.N.T.I.S. Blade Detected")
-        elif 'config' in data[0]:
-            cMode.config(text='Config Mode')
-            CMode.config(text='Config Mode')
-            EXOhud()
-
-        elif 'armed' in data[0]:
-            cMode.config(text='System Armed')
-            CMode.config(text='System Armed')
-            EXOhud()
-
-        elif 'mode = 0' in data[0]:
-            bladePos.config(text='Mode = Safe')
-            bladePOS.config(text='Mode = Safe')
-            BladePos.config(text='Mode = Safe')
-
-        elif 'mode = 1' in data[0]:
-            bladePos.config(text='Mode = Sync')
-            bladePOS.config(text='Mode = Sync')
-            BladePos.config(text='Mode = Sync')
-
-        elif 'mode = 2' in data[0]:
-            bladePos.config(text='Mode = Hold')
-            bladePOS.config(text='Mode = Hold')
-            BladePos.config(text='Mode = Hold')
-
-        elif 'stat' in data[0]:
-            dBat.config(text='Drv_Pwr = ' + data[1]+' V')
-            DBat.config(text='Drv_Pwr = ' + data[1]+' V')
-            dBat_t.config(text='Drv_Temp = ' + data[2]+' C')
-            DBat_t.config(text='Drv_Temp = ' + data[2]+' C')
-            dBat1.config(text='Cell_1 = ' + data[3])
-            DBat1.config(text='Cell_1 = ' + data[3])
-            dBat2.config(text='Cell_2 = ' + data[4])
-            DBat2.config(text='Cell_2 = ' + data[4])
-            dBat3.config(text='Cell_3 = ' + data[5])
-            DBat3.config(text='Cell_3 = ' + data[5])
-            dBat4.config(text='Cell_4 = ' + data[6])
-            DBat4.config(text='Cell_4 = ' + data[6])
-            cBat.config(text='Ctrl_V = ' + data[8]+' V')
-            CBat.config(text='Ctrl_V = ' + data[8]+' V')
-            cBat_t.config(text='Ctrl_Temp = ' + data[7]+' C')
-            CBat_t.config(text='Ctrl_Temp = ' + data[7]+' C')
-
-        elif 'ctrlblow' in data[0]:
-            alert('Ctrl Bat V Low')
-
-        elif 'alert' in data[0]:
-            alert('Drive Bat V Low')
-        data = ''
-        time.sleep(.2)
-        if Stop_t:
-            break
 
 
 ################ MAIN DISPLAY #####################################
@@ -217,11 +180,11 @@ CBat_t.place(x=45, y=165)
 
 
 CMode = Label(Dash_view, text=serBuffer,
-              bg="red", fg="black", font=("Arial", 20))
+              bg="red", fg="black", font=("Arial", 25))
 CMode.place(x=20, y=15)
 
 BladePos = Label(Dash_view, text="Mode = Safe", bg="black",
-                 fg="orange", font=("Arial", 15))
+                 fg="orange", font=("Arial", 20))
 BladePos.place(x=20, y=85)
 ################CONFIG VIEW DASH###############################
 bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
@@ -229,15 +192,15 @@ bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
 bladePOS.place(x=50, y=20)
 
 safebtn = Button(Config_view, text="Safe", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeS#"))
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send(f'main, test1'))
 safebtn.place(x=525, y=60)
 
 syncbtn = Button(Config_view, text="Sync", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modes#"))
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('main, test2'))
 syncbtn.place(x=525, y=150)
 
 holdbtn = Button(Config_view, text="Hold", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('uRemote, devices'))
 holdbtn.place(x=525, y=240)
 
 PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 25),
@@ -250,7 +213,7 @@ P_val.place(x=8, y=20)
 I_val = Label(PID_view, text="I = 1.0", bg="black",
               fg="white", font=("Arial", 20))
 I_val.place(x=8, y=65)
-D_val = Label(PID_view, text="D = 1", bg="black",
+D_val = Label(PID_view, text="D = 0", bg="black",
               fg="white", font=("Arial", 20))
 D_val.place(x=8, y=110)
 
@@ -310,7 +273,7 @@ cMode.place(x=20, y=15)
 
 bladePos = Label(EXO_Stats, text="Mode = Safe", bg="black",
                  fg="orange", font=("Arial", 35))
-bladePos.place(x=20, y=85)
+bladePos.place(x=20, y=90)
 
 PID_Config = LabelFrame(EXO_Stats, text=" PID_Config ", font=("Arial", 35),
                         width=350, height=300, bd=10, bg="black", fg="orange")
@@ -322,7 +285,7 @@ P_val.place(x=8, y=20)
 I_val = Label(PID_Config, text="I = 1.0", bg="black",
               fg="white", font=("Arial", 30))
 I_val.place(x=8, y=65)
-D_val = Label(PID_Config, text="D = 1", bg="black",
+D_val = Label(PID_Config, text="D = 0", bg="black",
               fg="white", font=("Arial", 30))
 D_val.place(x=8, y=125)
 
@@ -368,8 +331,10 @@ cBat_t = Label(BAT_Stats, text="CBat Temp = 20 C",
                bg="black", fg="DarkOrange2", font=("Arial", 40))
 cBat_t.place(x=400, y=425)
 
-serial = threading.Thread(target=serialRead, args=())
-serial.setDaemon(True)
-serial.start()
+SockThread = threading.Thread(target=SocketIn, args=())
+SockThread.setDaemon(True)
+SockThread.start()
+
+send(name)
 
 root.mainloop()
