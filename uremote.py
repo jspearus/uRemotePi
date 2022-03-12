@@ -18,6 +18,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 DataIn = ''
 connected = True
+step = '75'
 
 
 def send(msg):
@@ -40,8 +41,8 @@ def SocketIn():
             break
         print(DataIn)
         ####################### COMMANDS ##################
-        if DataIn == 'test1':
-            bladePOS.config(text='test Rec...')
+        if DataIn == 'Rover':
+            roverStatus.config(text='Rover Online')
         DataIn = ''
         time.sleep(.5)
 
@@ -58,10 +59,9 @@ root = Tk()
 
 root.configure(background='black')
 root.title("_Rover Remote_")
-root.geometry('2080x730+0+0')
+root.geometry('800x480+0+0')
 
 text = ""
-serBuffer = "System Online"
 comData = ""
 mynum = 0
 Stop_t = False
@@ -69,25 +69,39 @@ Stop_t = False
 if platform.system() == "Linux":
     os.system('xinput map-to-output 6 HDMI-1')
     root.config(cursor="none")
-    root.attributes('-fullscreen', False)
+    root.attributes('-fullscreen', True)
 
 
 elif platform.system() == "Windows":
     pass
 
 
-def Config():
+def navView():
     Dash_view.place_forget()
-    btn.place_forget()
-    Config_view.place(x=0, y=50)
-    btn2.place(x=675, y=350)
+    Pilot_view.place_forget()
+    cam_view.place_forget()
+    Nav_view.place(x=0, y=50)
+
+
+def camView():
+    Dash_view.place_forget()
+    Pilot_view.place_forget()
+    Nav_view.place_forget()
+    cam_view.place(x=0, y=50)
+
+
+def pilotView():
+    Dash_view.place_forget()
+    Nav_view.place_forget()
+    cam_view.place_forget()
+    Pilot_view.place(x=0, y=50)
 
 
 def Dashboard():
-    Config_view.place_forget()
-    btn2.place_forget()
-    btn.place(x=675, y=350)
     Dash_view.place(x=0, y=50)
+    Nav_view.place_forget()
+    Pilot_view.place_forget()
+    cam_view.place_forget()
 
 
 def Display(x):
@@ -99,23 +113,29 @@ def alert(x):
     Dashboard()
     alertLabel = Label(root, bg="red", font=("Arial", 40), text=x)
     alertLabel.place(x=400, y=200)
-    BAThud()
-    cBata.place(x=375, y=370)
-    CBata.place(x=375, y=370)
 
 
-def EXOhud():
-    EXO_Stats.place(x=900, y=100)
-    BAT_Stats.place_forget()
-    btn5.place(x=675, y=250)
-    btn6.place_forget()
+def setSpeed(x):
+    global step
+    step = x
+    roverSpeed.config(text=f"Speed = {step}")
 
 
-def BAThud():
-    BAT_Stats.place(x=900, y=100)
-    EXO_Stats.place_forget()
-    btn5.place_forget()
-    btn6.place(x=675, y=250)
+def setCamSpeed(x):
+    send(x)
+    if"clow" in x:
+        speed = "LOW"
+    elif"cmed" in x:
+        speed = "MED"
+    elif"chi" in x:
+        speed = "HI"
+    camSpeed.config(text=f"Speed = {speed}")
+
+
+def sendMove(x):
+    global step
+    event = x + step
+    send(event)
 
 
 def Quit():
@@ -128,84 +148,67 @@ def Quit():
     root.destroy()
 
 
-################ MAIN DISPLAY #####################################
-# create frame and scrollbar
+############################ ROOT DISPLAY #################################
+osLabel = Label(root, bg="DarkOrange2", fg="white", font=(
+    "Arial", 10), height=1, width=75, justify="left")
+osLabel.place(x=40, y=20)
+
+if platform.system() == "Linux":
+    osLabel.config(
+        text="Device: uRemote                                                                            ", justify="left")
+
+elif platform.system() == "Windows":
+    osLabel.config(
+        text="Device: PC                                                                                 ", justify="left")
+############################ ROOT BUTTONS ##########################################
+quitBtn = Button(root, text="Quit", bg="DarkOrange2", command=Quit)
+quitBtn.place(x=725, y=10)
+
+pilotBtn = Button(root, height=3, width=10, text="Pilot\nCtrl",
+                  bg="DarkOrange2", command=pilotView)
+pilotBtn.place(x=675, y=100)
+
+camBtn = Button(root, height=3, width=10, text="Vision\nCtrl",
+                bg="DarkOrange2", command=camView)
+camBtn.place(x=675, y=200)
+
+navBtn = Button(root, height=3, width=10,
+                text="Nav\nCtrl", bg="DarkOrange2", command=navView)
+navBtn.place(x=675, y=300)
+
+dashBtn = Button(root, height=3, width=10, text="Dashboard",
+                 bg="DarkOrange2", command=Dashboard)
+dashBtn.place(x=675, y=400)
+###################################################################################
+#################### CREATE FRAMES ##################################################
+
 Dash_frame = Frame(root, bg="black")
 
-Dash_view = LabelFrame(root, text="-Dashbord-", font=("Arial", 20),
-                       width=650, height=350, bd=5, bg="black", fg="orange")
+Dash_view = LabelFrame(root, text="-Dashbord_Johnny-", font=("Arial", 20),
+                       width=650, height=410, bd=5, bg="black", fg="orange")
 Dash_view.place(x=2, y=50)
 
-Config_view = LabelFrame(root, text="-Configuration-", font=("Arial", 20),
-                         width=650, height=350, bd=5, bg="black", fg="orange")
+Pilot_view = LabelFrame(root, text="-Pilot_Ctrl-", font=("Arial", 20),
+                        width=650, height=410, bd=5, bg="black", fg="orange")
 
-Bat_view = LabelFrame(Dash_view, text="-PowerMGMT-",
-                      bg="black", fg="orange", height=225, width=300)
-Bat_view.place(x=300, y=75)
+cam_view = LabelFrame(root, text="-Vision_Ctrl-", font=("Arial", 20),
+                      width=650, height=410, bd=5, bg="black", fg="orange")
 
-DBat = Label(Bat_view, text="Drive_pwr = 16.4 V",
-             bg="black", fg="white", font=("Arial", 15))
-DBat.place(x=7, y=5)
+Nav_view = LabelFrame(root, text="-Nav_Ctrl-", font=("Arial", 20),
+                      width=650, height=410, bd=5, bg="black", fg="orange")
+################ DASHBOARD #####################################
 
-DBat1 = Label(Bat_view, text="Cell_1 = Good",
-              bg="black", fg="white", font=("Arial", 10))
-DBat1.place(x=12, y=30)
+roverStatus = Label(Dash_view, text="Rover Offline",
+                    bg="red", fg="black", font=("Arial", 25))
+roverStatus.place(x=20, y=15)
 
-DBat2 = Label(Bat_view, text="Cell_2 = Good",
-              bg="black", fg="white", font=("Arial", 10))
-DBat2.place(x=12, y=50)
+roverModeD = Label(Dash_view, text="Mode = Safe", bg="black",
+                   fg="orange", font=("Arial", 20))
+roverModeD.place(x=20, y=85)
 
-DBat3 = Label(Bat_view, text="Cell_3 = Good",
-              bg="black", fg="white", font=("Arial", 10))
-DBat3.place(x=12, y=70)
-
-DBat4 = Label(Bat_view, text="Cell_4 = Good",
-              bg="black", fg="white", font=("Arial", 10))
-DBat4.place(x=12, y=90)
-
-DBat_t = Label(Bat_view, text="DBat Temp = 25 C",
-               bg="black", fg="white", font=("Arial", 11))
-DBat_t.place(x=130, y=60)
-
-CBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
-             bg="black", fg="white", font=("Arial", 15))
-CBat.place(x=42, y=135)
-
-CBata = Label(Bat_view, text="CTRL_pwr = LOW",
-              bg="black", fg="white", font=("Arial", 17))
-
-CBat_t = Label(Bat_view, text="CBat Temp = 20 C",
-               bg="black", fg="white", font=("Arial", 17))
-CBat_t.place(x=45, y=165)
-
-
-CMode = Label(Dash_view, text=serBuffer,
-              bg="red", fg="black", font=("Arial", 25))
-CMode.place(x=20, y=15)
-
-BladePos = Label(Dash_view, text="Mode = Safe", bg="black",
-                 fg="orange", font=("Arial", 20))
-BladePos.place(x=20, y=85)
-################CONFIG VIEW DASH###############################
-bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
-                 fg="white", font=("Arial", 20))
-bladePOS.place(x=50, y=20)
-
-safebtn = Button(Config_view, text="Safe", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send(f'main, test1'))
-safebtn.place(x=525, y=60)
-
-syncbtn = Button(Config_view, text="Sync", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('main, test2'))
-syncbtn.place(x=525, y=150)
-
-holdbtn = Button(Config_view, text="Hold", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('uRemote, devices'))
-holdbtn.place(x=525, y=240)
-
-PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 25),
+PID_view = LabelFrame(Dash_view, text=" PID_Config ", font=("Arial", 25),
                       width=250, height=200, bd=5, bg="black", fg="orange")
-PID_view.place(x=50, y=75)
+PID_view.place(x=300, y=75)
 
 P_val = Label(PID_view, text="P = 3.5", bg="black",
               fg="white", font=("Arial", 20))
@@ -217,119 +220,100 @@ D_val = Label(PID_view, text="D = 0", bg="black",
               fg="white", font=("Arial", 20))
 D_val.place(x=8, y=110)
 
-serLabel = Label(root, bg="black", fg="DarkOrange2", font=("Arial", 15), justify="left",
-                 text='serial status   ')
-serLabel.place(x=350, y=100)
+################ NAV Ctrl ###############################
 
-btn2 = Button(root, height=3, width=10, text="Dashboard",
-              bg="DarkOrange2", command=Dashboard)
+roverSpeed = Label(Nav_view, text="Mode = Safe", bg="black",
+                   fg="white", font=("Arial", 20))
+roverSpeed.place(x=50, y=20)
 
+scanBtn = Button(Nav_view, text="Scan\nAll", height=3,
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, cam-pFront'))
+scanBtn.place(x=525, y=100)
 
-Btn3 = Button(root, text="Quit", bg="DarkOrange2", command=Quit)
-Btn3.place(x=700, y=10)
+scanEnBtn = Button(Nav_view, text="Enable", height=3,
+                   width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('rover, cam-pLeft'))
+scanEnBtn.place(x=525, y=200)
 
-osLabel = Label(root, bg="DarkOrange2", fg="white", font=(
-    "Arial", 10), height=1, width=75, justify="left")
-osLabel.place(x=40, y=20)
+scanDisBtn = Button(Nav_view, text="Disable", height=3,
+                    width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('rover, devices'))
+scanDisBtn.place(x=525, y=300)
 
-if platform.system() == "Linux":
-    osLabel.config(
-        text="Device: M.A.N.T.I.S. Blade                                                                                 ", justify="left")
+################# VISION VIEW ########################################
+camSpeed = Label(cam_view, text=f"Speed = MED", bg="black",
+                 fg="white", font=("Arial", 15))
+camSpeed.place(x=475, y=20)
+cLowBtn = Button(cam_view, text="LOW", height=2,
+                 width=5, bg="orange", fg="black", font=("Arial", 8), command=lambda: setCamSpeed(f'rover, cam-clow'))
+cLowBtn.place(x=430, y=70)
+cMedBtn = Button(cam_view, text="MED", height=2,
+                 width=5, bg="orange", fg="black", font=("Arial", 8), command=lambda: setCamSpeed(f'rover, cam-cmed'))
+cMedBtn.place(x=500, y=70)
+cHiBtn = Button(cam_view, text="HI", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 8), command=lambda: setCamSpeed(f'rover, cam-chi'))
+cHiBtn.place(x=570, y=70)
 
-elif platform.system() == "Windows":
-    osLabel.config(
-        text="Device: PC                                                                                 ")
+cUpBtn = Button(cam_view, text="Up", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: send(f'rover, cam-cup'))
+cUpBtn.place(x=475, y=190)
+cdnBtn = Button(cam_view, text="Down", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: send(f'rover, cam-cdown'))
+cdnBtn.place(x=475, y=310)
+cLfBtn = Button(cam_view, text="Left", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: send(f'rover, cam-cleft'))
+cLfBtn.place(x=410, y=250)
+cRtBtn = Button(cam_view, text="Right", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: send(f'rover, cam-cright'))
+cRtBtn.place(x=540, y=250)
 
-
-btn = Button(root, height=3, width=10,
-             text="Config", bg="DarkOrange2", command=Config)
-btn.place(x=675, y=350)
-
-
-btn5 = Button(root, text="HUD_bat \nView", height=3,
-              width=10, bg="DarkOrange2", command=BAThud)
-btn5.place(x=675, y=250)
-
-btn6 = Button(root, text="HUD_EXO \nView", height=3,
-              width=10, bg="DarkOrange2", command=EXOhud)
-
-
-######################### HUD WIDGETS ############################
-
-
-hudLabel = Label(root, text="HUD view", font=(
-    "Arial", 30),  bg="black", fg="orange")
-hudLabel.place(x=900, y=20)
-
-#################### HUD EXO FRAME ###############################
-
-EXO_Stats = LabelFrame(root, text=" EXO_Stats ", font=("Arial", 50),
-                       width=1000, height=600, bd=15, bg="black", fg="orange")
-EXO_Stats.place(x=900, y=100)
-
-cMode = Label(EXO_Stats, text=serBuffer,
-              bg="red", fg="black", font=("Arial", 40))
-cMode.place(x=20, y=15)
-
-bladePos = Label(EXO_Stats, text="Mode = Safe", bg="black",
-                 fg="orange", font=("Arial", 35))
-bladePos.place(x=20, y=90)
-
-PID_Config = LabelFrame(EXO_Stats, text=" PID_Config ", font=("Arial", 35),
-                        width=350, height=300, bd=10, bg="black", fg="orange")
-PID_Config.place(x=400, y=150)
-
-P_val = Label(PID_Config, text="P = 3.5", bg="black",
-              fg="white", font=("Arial", 30))
-P_val.place(x=8, y=20)
-I_val = Label(PID_Config, text="I = 1.0", bg="black",
-              fg="white", font=("Arial", 30))
-I_val.place(x=8, y=65)
-D_val = Label(PID_Config, text="D = 0", bg="black",
-              fg="white", font=("Arial", 30))
-D_val.place(x=8, y=125)
+cLeftBtn = Button(cam_view, text="Look\nLeft", height=2,
+                  width=5, bg="orange", fg="black", font=("Arial", 15), command=lambda: send(f'rover, cam-pLeft'))
+cLeftBtn.place(x=25, y=300)
+cFrontBtn = Button(cam_view, text="Look\nFront", height=2,
+                   width=5, bg="orange", fg="black", font=("Arial", 15), command=lambda: send(f'rover, cam-pFront'))
+cFrontBtn.place(x=125, y=300)
+cRightBtn = Button(cam_view, text="Look\nRight", height=2,
+                   width=5, bg="orange", fg="black", font=("Arial", 15), command=lambda: send(f'rover, cam-pRight'))
+cRightBtn.place(x=225, y=300)
 
 
-# ################### HUD BAT FRAME ##############################
+################# PILOT VIEW ########################################
 
-BAT_Stats = LabelFrame(root, text=" BAT_Stats ", font=("Arial", 50),
-                       width=1000, height=600, bd=15, bg="black", fg="orange")
-# BAT_Stats.place(x=20, y=100)
+roverSpeed = Label(Pilot_view, text=f"Speed = {step}", bg="black",
+                   fg="white", font=("Arial", 15))
+roverSpeed.place(x=200, y=115)
 
-dBat = Label(BAT_Stats, text="Drive_pwr = 100 %",
-             bg="black", fg="DarkOrange2", font=("Arial", 32))
-dBat.place(x=20, y=15)
+pUpBtn = Button(Pilot_view, text="Forward", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-f-'))
+pUpBtn.place(x=130, y=170)
+pdnBtn = Button(Pilot_view, text="Back", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-b-'))
+pdnBtn.place(x=130, y=290)
+pLfBtn = Button(Pilot_view, text="Left", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-rl-'))
+pLfBtn.place(x=65, y=230)
+pRtBtn = Button(Pilot_view, text="Right", height=2,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-r-'))
+pRtBtn.place(x=195, y=230)
 
-dBat1 = Label(BAT_Stats, text="Cell_1 = 4.1v",
-              bg="black", fg="white", font=("Arial", 28))
-dBat1.place(x=40, y=85)
+pLeftBtn = Button(Pilot_view, text="Rotate\nLeft", height=2,
+                  width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-rl-'))
+pLeftBtn.place(x=20, y=320)
+pFrontBtn = Button(Pilot_view, text="Rotate\nRight", height=2,
+                   width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-rr-'))
+pFrontBtn.place(x=230, y=320)
+pStopBtn = Button(Pilot_view, text="STOP", height=2,
+                  width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-s-s'))
+pStopBtn.place(x=550, y=320)
 
-dBat2 = Label(BAT_Stats, text="Cell_2 = 4.1v",
-              bg="black", fg="white", font=("Arial", 28))
-dBat2.place(x=40, y=135)
-
-dBat3 = Label(BAT_Stats, text="Cell_3 = 4.1v",
-              bg="black", fg="white", font=("Arial", 28))
-dBat3.place(x=40, y=190)
-
-dBat4 = Label(BAT_Stats, text="Cell_4 = 4.1v",
-              bg="black", fg="white", font=("Arial", 28))
-dBat4.place(x=40, y=250)
-
-dBat_t = Label(BAT_Stats, text="DBat Temp = 25 C",
-               bg="black", fg="DarkOrange2", font=("Arial", 40))
-dBat_t.place(x=400, y=150)
-
-cBat = Label(BAT_Stats, text="CTRL_pwr = LOW",
-             bg="black", fg="DarkOrange2", font=("Arial", 30))
-cBat.place(x=400, y=370)
-
-cBata = Label(BAT_Stats, text="CTRL_pwr = LOW",
-              bg="black", fg="red", font=("Arial", 30))
-
-cBat_t = Label(BAT_Stats, text="CBat Temp = 20 C",
-               bg="black", fg="DarkOrange2", font=("Arial", 40))
-cBat_t.place(x=400, y=425)
+pseedLabel = Label(Pilot_view, text="75     Speed Select     500", bg="black",
+                   fg="white", font=("Arial", 10))
+pseedLabel.place(x=20, y=0)
+pspeed = Scale(Pilot_view, bg="orange", fg="black",
+               font=("Arial", 10), from_=75, to=500, tickinterval=100, width=35, length=300, orient=HORIZONTAL)
+pspeed.place(x=20, y=25)
+setBtn = Button(Pilot_view, text="Set", height=1,
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: setSpeed(f'{pspeed.get()}'))
+setBtn.place(x=25, y=125)
 
 SockThread = threading.Thread(target=SocketIn, args=())
 SockThread.setDaemon(True)
