@@ -23,7 +23,7 @@ step = '1000'
 name_file = 'error'
 
 if platform.system() == "Linux":
-    os.system('xinput map-to-output 6 HDMI-1')
+    # os.system('xinput map-to-output 6 HDMI-1')
     root.config(cursor="none")
     root.attributes('-fullscreen', False)
     name_file = '/home/pi/uRemotePi/name.txt'
