@@ -28,6 +28,12 @@ if platform.system() == "Linux":
     # root.attributes('-fullscreen', False)
     # name_file = '/home/pi/uRemotePi/name.txt'
     name_file = '/home/jeff/Documents/Github/uRemotePi/name.txt'
+    try:
+        port = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=10)
+        port.write(str.encode("comm#"))
+        port.write(str.encode("comm#"))
+    except serial.SerialException as e:
+        print("device not detected")
 
 
 elif platform.system() == "Windows":
