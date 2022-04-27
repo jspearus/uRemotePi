@@ -23,8 +23,8 @@ if platform.system() == "Linux":
     name_file = '/home/jeff/Documents/Github/uRemotePi/name.txt'
     try:
         port = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=10)
-        port.write(str.encode("comm#"))
-        port.write(str.encode("comm#"))
+        port.write(str.encode("whoRu#"))
+        port.write(str.encode("whoRu#"))
     except serial.SerialException as e:
         print("device not detected")
 
@@ -99,19 +99,22 @@ def SerialOut(com):
 
 def serialRead():
     global serBuffer
-    serLabel.config(text="Device not Connected...")
+    roverStatus.config(text="Device not Connected...")
     while True:
         Data = port.readline()
         Data = str(Data, 'UTF-8')
         data = Data.split(',')
         # serLabel.config(text=data[0])
-        if 'MANTIS' in data[0]:
-            serLabel.config(text="M.A.N.T.I.S. Blade Detected")
+        if 'ANT' in data[0]:
+            roverStatus.config(text="ANT.ini Detected")
 
-        elif 'config' in data[0]:
-            cMode.config(text='Config Mode')
-            CMode.config(text='Config Mode')
-            EXOhud()
+        elif 'sit' in data[0]:
+            roverModeD.config(text='Mode = Sit')
+            roverModeM.config(text='Mode = Sit')
+
+        elif 'stand' in data[0]:
+            roverModeD.config(text='Mode = Stand')
+            roverModeM.config(text='Mode = Stand')
 
         elif 'ctrlblow' in data[0]:
             alert('Ctrl Bat V Low')
@@ -159,7 +162,7 @@ dashBtn.place(x=675, y=400)
 ###################################################################################
 #################### CREATE FRAMES ##################################################
 
-Dash_frame = Frame(root, bg="black")
+Root_frame = Frame(root, bg="black")
 
 Dash_view = LabelFrame(root, text="-ANT.ini-Dashboard", font=("Arial", 20),
                        width=650, height=410, bd=5, bg="black", fg="orange")
@@ -178,11 +181,15 @@ roverModeD = Label(Dash_view, text="Mode = Sit", bg="black",
 roverModeD.place(x=20, y=85)
 
 
-################# PILOT VIEW ########################################
+################# Manual Ctrl VIEW ########################################
 
 # roverSpeed = Label(Pilot_view, text=f"Speed = {step}", bg="black",
 #                    fg="white", font=("Arial", 15))
 # roverSpeed.place(x=200, y=115)
+
+roverModeM = Label(Pilot_view, text="Mode = Sit", bg="black",
+                   fg="orange", font=("Arial", 20))
+roverModeM.place(x=20, y=85)
 
 pUpBtn = Button(Pilot_view, text="Forward", height=2,
                 width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: SerialOut(b"stepf#"))
