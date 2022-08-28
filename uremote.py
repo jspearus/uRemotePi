@@ -43,6 +43,11 @@ def SocketIn():
         ####################### COMMANDS ##################
         if DataIn == 'Rover':
             roverStatus.config(text='Rover Online')
+        elif DataIn == 'rOffline':
+            roverStatus.config(text='Rover Offline')
+
+        elif "Bat" in DataIn:
+            roverModeD.config(text=DataIn)
         DataIn = ''
         time.sleep(.5)
 
@@ -102,6 +107,8 @@ def Dashboard():
     Nav_view.place_forget()
     Pilot_view.place_forget()
     cam_view.place_forget()
+    send("rover, bat")
+    send("rover, status")
 
 
 def Display(x):
@@ -227,15 +234,15 @@ roverSpeed = Label(Nav_view, text="Mode = Safe", bg="black",
 roverSpeed.place(x=50, y=20)
 
 scanBtn = Button(Nav_view, text="Scan\nAll", height=3,
-                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, cam-pFront'))
+                 width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, scan'))
 scanBtn.place(x=525, y=100)
 
 scanEnBtn = Button(Nav_view, text="Enable", height=3,
-                   width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('rover, cam-pLeft'))
+                   width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('rover, eSonar'))
 scanEnBtn.place(x=525, y=200)
 
 scanDisBtn = Button(Nav_view, text="Disable", height=3,
-                    width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('rover, devices'))
+                    width=10, bg="orange", fg="black", font=("Arial", 10), command=lambda: send('rover, dSonar'))
 scanDisBtn.place(x=525, y=300)
 
 ################# VISION VIEW ########################################
