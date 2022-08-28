@@ -7,6 +7,7 @@ import platform
 import threading
 import socket
 
+
 HEADER = 64
 PORT = 5000
 FORMAT = 'utf-8'
@@ -18,7 +19,18 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 DataIn = ''
 connected = True
-step = '75'
+step = '1000'
+name_file = 'error'
+
+if platform.system() == "Linux":
+    # os.system('xinput map-to-output 6 HDMI-1')
+    root.config(cursor="none")
+    root.attributes('-fullscreen', False)
+    name_file = '/home/pi/uRemotePi/name.txt'
+
+
+elif platform.system() == "Windows":
+    name_file = 'name.txt'
 
 
 def send(msg):
@@ -43,16 +55,11 @@ def SocketIn():
         ####################### COMMANDS ##################
         if DataIn == 'Rover':
             roverStatus.config(text='Rover Online')
-        elif DataIn == 'rOffline':
-            roverStatus.config(text='Rover Offline')
-
-        elif "Bat" in DataIn:
-            roverModeD.config(text=DataIn)
         DataIn = ''
         time.sleep(.5)
 
 
-with open('/home/pi/uRemotePi/name.txt') as f:
+with open(name_file) as f:
     name = f.readline()
     send(name)
     print(f"Connected as: {name}")
@@ -70,15 +77,6 @@ text = ""
 comData = ""
 mynum = 0
 Stop_t = False
-
-if platform.system() == "Linux":
-    os.system('xinput map-to-output 6 HDMI-1')
-    root.config(cursor="none")
-    root.attributes('-fullscreen', True)
-
-
-elif platform.system() == "Windows":
-    pass
 
 
 def navView():
@@ -103,6 +101,7 @@ def pilotView():
 
 
 def Dashboard():
+    send('rover, status')
     Dash_view.place(x=0, y=50)
     Nav_view.place_forget()
     Pilot_view.place_forget()
@@ -296,7 +295,7 @@ pdnBtn = Button(Pilot_view, text="Back", height=2,
                 width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-b-'))
 pdnBtn.place(x=130, y=290)
 pLfBtn = Button(Pilot_view, text="Left", height=2,
-                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-rl-'))
+                width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-l-'))
 pLfBtn.place(x=65, y=230)
 pRtBtn = Button(Pilot_view, text="Right", height=2,
                 width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-r-'))
@@ -312,11 +311,11 @@ pStopBtn = Button(Pilot_view, text="STOP", height=2,
                   width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: sendMove(f'rover, move-s-s'))
 pStopBtn.place(x=550, y=320)
 
-pseedLabel = Label(Pilot_view, text="75     Speed Select     500", bg="black",
+pseedLabel = Label(Pilot_view, text="1000                    Speed Select                    13000", bg="black",
                    fg="white", font=("Arial", 10))
 pseedLabel.place(x=20, y=0)
 pspeed = Scale(Pilot_view, bg="orange", fg="black",
-               font=("Arial", 10), from_=75, to=500, tickinterval=100, width=35, length=300, orient=HORIZONTAL)
+               font=("Arial", 10), from_=1000, to=13000, tickinterval=3000, width=35, length=300, orient=HORIZONTAL)
 pspeed.place(x=20, y=25)
 setBtn = Button(Pilot_view, text="Set", height=1,
                 width=5, bg="orange", fg="black", font=("Arial", 10), command=lambda: setSpeed(f'{pspeed.get()}'))
