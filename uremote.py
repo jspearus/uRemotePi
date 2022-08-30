@@ -27,8 +27,9 @@ if platform.system() == "Linux":
     os.system('xinput map-to-output 6 HDMI-1')
     root.config(cursor="none")
     root.attributes('-fullscreen', False)
-    try:
-        port = serial.Serial('/dev/ttyACM0', baudrate=9600, timeout=10)
+    try:  # /dev/ttyACM0
+        port = serial.Serial('/dev/serial0', baudrate=115200,
+                             bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
         port.write(str.encode("comm#"))
         port.write(str.encode("comm#"))
     except serial.SerialException as e:
@@ -38,7 +39,7 @@ if platform.system() == "Linux":
 elif platform.system() == "Windows":
 
     try:
-        port = serial.Serial('COM10', baudrate=9600, timeout=10)
+        port = serial.Serial('COM10', baudrate=115200, timeout=10)
         print("COM10 Connected")
         port.write(str.encode("comm#"))
     except serial.SerialException as e:
