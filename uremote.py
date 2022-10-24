@@ -138,6 +138,11 @@ def serialRead():
             bladePOS.config(text='Mode = Hold')
             BladePos.config(text='Mode = Hold')
 
+        elif 'mode = 4' in data[0]:
+            bladePos.config(text='Mode = Quick')
+            bladePOS.config(text='Mode = Quick')
+            BladePos.config(text='Mode = Quick')
+
         elif 'stat' in data[0]:
             dBat.config(text='Drv_Pwr = ' + data[1]+' V')
             DBat.config(text='Drv_Pwr = ' + data[1]+' V')
@@ -241,6 +246,10 @@ syncbtn.place(x=525, y=150)
 holdbtn = Button(Config_view, text="Hold", height=3,
                  width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
 holdbtn.place(x=525, y=240)
+
+holdbtn = Button(Config_view, text="Quick", height=3,
+                 width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeq#"))
+holdbtn.place(x=400, y=240)
 
 PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 25),
                       width=250, height=200, bd=5, bg="black", fg=foreground)
