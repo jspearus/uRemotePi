@@ -18,7 +18,7 @@ root.title("_Mantis_Blade_")
 root.geometry('2080x730+0+0')
 
 text = ""
-serBuffer = "Mode = Armed"
+serBuffer = "System Armed"
 comData = ""
 mynum = 0
 Stop_t = False
@@ -47,19 +47,33 @@ elif platform.system() == "Windows":
         print("device not detected")
 
 
+def Enable():
+    Enablebtn.place_forget()
+    Disablebtn.place(x=300, y=75)
+    quickMode.config(text="Quick Mode = En")
+    port.write(str.encode("qen#"))
+
+
+def Disable():
+    Disablebtn.place_forget()
+    Enablebtn.place(x=300, y=75)
+    quickMode.config(text="Quick Mode = Dis")
+    port.write(str.encode("qdis#"))
+
+
 def Config():
     Dash_view.place_forget()
     btn.place_forget()
-    Config_view.place(x=0, y=50)
-    btn2.place(x=675, y=350)
+    Config_view.place(x=10, y=50)
+    btn2.place(x=625, y=350)
     port.write(str.encode("config#"))
 
 
 def Dashboard():
     Config_view.place_forget()
     btn2.place_forget()
-    btn.place(x=675, y=350)
-    Dash_view.place(x=0, y=50)
+    btn.place(x=625, y=350)
+    Dash_view.place(x=10, y=50)
     port.write(str.encode("dash#"))
 
 
@@ -80,7 +94,7 @@ def alert(x):
 def EXOhud():
     EXO_Stats.place(x=900, y=100)
     BAT_Stats.place_forget()
-    btn5.place(x=675, y=250)
+    btn5.place(x=625, y=250)
     btn6.place_forget()
     port.write(str.encode("exov#"))
 
@@ -89,7 +103,7 @@ def BAThud():
     BAT_Stats.place(x=900, y=100)
     EXO_Stats.place_forget()
     btn5.place_forget()
-    btn6.place(x=675, y=250)
+    btn6.place(x=625, y=250)
     port.write(str.encode("ctrlt#"))
 
 
@@ -112,7 +126,7 @@ def serialRead():
         data = Data.split(',')
         # serLabel.config(text=data[0])
         if 'MANTIS' in data[0]:
-            serLabel.config(text="M.A.N.T.I.S. Blade Detected")
+            serLabel.config(text="M.A.N.T.I.S. Arm Detected")
         elif 'config' in data[0]:
             cMode.config(text='Config Mode')
             CMode.config(text='Config Mode')
@@ -177,15 +191,15 @@ def serialRead():
 Dash_frame = Frame(root, bg="black")
 
 Dash_view = LabelFrame(root, text="-Dashbord-", font=("Arial", 20),
-                       width=650, height=350, bd=5, bg="black", fg=foreground)
-Dash_view.place(x=2, y=50)
+                       width=600, height=350, bd=5, bg="black", fg=foreground)
+Dash_view.place(x=10, y=50)
 
 Config_view = LabelFrame(root, text="-Configuration-", font=("Arial", 20),
-                         width=650, height=350, bd=5, bg="black", fg=foreground)
+                         width=600, height=350, bd=5, bg="black", fg=foreground)
 
 Bat_view = LabelFrame(Dash_view, text="-PowerMGMT-",
                       bg="black", fg=foreground, height=225, width=300)
-Bat_view.place(x=300, y=75)
+Bat_view.place(x=250, y=75)
 
 DBat = Label(Bat_view, text="Drive_pwr = 16.4 V",
              bg="black", fg="white", font=("Arial", 15))
@@ -230,6 +244,10 @@ CMode.place(x=20, y=15)
 BladePos = Label(Dash_view, text="Mode = Safe", bg="black",
                  fg=foreground, font=("Arial", 15))
 BladePos.place(x=20, y=85)
+
+quickMode = Label(Dash_view, text="Quick Mode = Dis", bg="black",
+                  fg="white", font=("Arial", 10))
+quickMode.place(x=20, y=125)
 ################CONFIG VIEW DASH###############################
 bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
                  fg="white", font=("Arial", 20))
@@ -237,22 +255,27 @@ bladePOS.place(x=50, y=20)
 
 safebtn = Button(Config_view, text="Safe", height=3,
                  width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeS#"))
-safebtn.place(x=525, y=60)
+safebtn.place(x=475, y=60)
 
 syncbtn = Button(Config_view, text="Sync", height=3,
                  width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modes#"))
-syncbtn.place(x=525, y=150)
+syncbtn.place(x=475, y=150)
 
 holdbtn = Button(Config_view, text="Hold", height=3,
                  width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
-holdbtn.place(x=525, y=240)
+holdbtn.place(x=475, y=240)
 
-holdbtn = Button(Config_view, text="Quick", height=3,
-                 width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeq#"))
-holdbtn.place(x=400, y=240)
 
-PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 25),
-                      width=250, height=200, bd=5, bg="black", fg=foreground)
+Enablebtn = Button(Config_view, text="Enable \nQuick", height=3,
+                   width=10, bg=foreground, fg="black", font=("Arial", 10), command=Enable)
+Enablebtn.place(x=300, y=75)
+
+Disablebtn = Button(Config_view, text="Disable \nQuick", height=3,
+                    width=10, bg=foreground, fg="black", font=("Arial", 10), command=Disable)
+
+
+PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 20),
+                      width=200, height=200, bd=5, bg="black", fg=foreground)
 PID_view.place(x=50, y=75)
 
 P_val = Label(PID_view, text="P = 3.5", bg="black",
@@ -267,7 +290,7 @@ D_val.place(x=8, y=110)
 
 serLabel = Label(root, bg="black", fg=foreground, font=("Arial", 15), justify="left",
                  text='serial status   ')
-serLabel.place(x=350, y=100)
+serLabel.place(x=300, y=100)
 
 btn2 = Button(root, height=3, width=10, text="Dashboard",
               bg=foreground, command=Dashboard)
@@ -282,21 +305,21 @@ osLabel.place(x=40, y=20)
 
 if platform.system() == "Linux":
     osLabel.config(
-        text="Device: M.A.N.T.I.S. Blade                                                                                 ", justify="left")
+        text="Device: Cyber Deck v 2.0.0                                                                                           ", justify="left")
 
 elif platform.system() == "Windows":
     osLabel.config(
-        text="Device: PC                                                                                 ")
+        text="Device: PC                                                                                                          ")
 
 
 btn = Button(root, height=3, width=10,
              text="Config", bg=foreground, command=Config)
-btn.place(x=675, y=350)
+btn.place(x=625, y=350)
 
 
 btn5 = Button(root, text="HUD_bat \nView", height=3,
               width=10, bg=foreground, command=BAThud)
-btn5.place(x=675, y=250)
+btn5.place(x=625, y=250)
 
 btn6 = Button(root, text="HUD_EXO \nView", height=3,
               width=10, bg=foreground, command=EXOhud)
