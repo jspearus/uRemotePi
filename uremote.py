@@ -201,38 +201,38 @@ Bat_view = LabelFrame(Dash_view, text="-PowerMGMT-",
                       bg="black", fg=foreground, height=225, width=300)
 Bat_view.place(x=250, y=75)
 
-DBat = Label(Bat_view, text="Drive_pwr = 16.4 V",
+DBat = Label(Bat_view, text="Drive_pwr = 99 V",
              bg="black", fg="white", font=("Arial", 15))
 DBat.place(x=7, y=5)
 
-DBat1 = Label(Bat_view, text="Cell_1 = Good",
+DBat1 = Label(Bat_view, text="Cell_1 = 99",
               bg="black", fg="white", font=("Arial", 10))
 DBat1.place(x=12, y=30)
 
-DBat2 = Label(Bat_view, text="Cell_2 = Good",
+DBat2 = Label(Bat_view, text="Cell_2 = 99",
               bg="black", fg="white", font=("Arial", 10))
 DBat2.place(x=12, y=50)
 
-DBat3 = Label(Bat_view, text="Cell_3 = Good",
+DBat3 = Label(Bat_view, text="Cell_3 = 99",
               bg="black", fg="white", font=("Arial", 10))
 DBat3.place(x=12, y=70)
 
-DBat4 = Label(Bat_view, text="Cell_4 = Good",
+DBat4 = Label(Bat_view, text="Cell_4 = 99",
               bg="black", fg="white", font=("Arial", 10))
 DBat4.place(x=12, y=90)
 
-DBat_t = Label(Bat_view, text="DBat Temp = 25 C",
+DBat_t = Label(Bat_view, text="DBat Temp = 99 C",
                bg="black", fg="white", font=("Arial", 11))
 DBat_t.place(x=130, y=60)
 
-CBat = Label(Bat_view, text="CTRL_pwr = 4.0 V",
+CBat = Label(Bat_view, text="CTRL_pwr = 99 V",
              bg="black", fg="white", font=("Arial", 15))
 CBat.place(x=42, y=135)
 
 CBata = Label(Bat_view, text="CTRL_pwr = LOW",
               bg="black", fg="white", font=("Arial", 17))
 
-CBat_t = Label(Bat_view, text="CBat Temp = 20 C",
+CBat_t = Label(Bat_view, text="CBat Temp = 99 C",
                bg="black", fg="white", font=("Arial", 17))
 CBat_t.place(x=45, y=165)
 
@@ -367,27 +367,27 @@ BAT_Stats = LabelFrame(root, text=" BAT_Stats ", font=("Arial", 50),
                        width=1000, height=600, bd=15, bg="black", fg=foreground)
 # BAT_Stats.place(x=20, y=100)
 
-dBat = Label(BAT_Stats, text="Drive_pwr = 100 %",
+dBat = Label(BAT_Stats, text="Drive_pwr = 99",
              bg="black", fg=foreground, font=("Arial", 32))
 dBat.place(x=20, y=15)
 
-dBat1 = Label(BAT_Stats, text="Cell_1 = 4.1v",
+dBat1 = Label(BAT_Stats, text="Cell_1 = 99",
               bg="black", fg="white", font=("Arial", 28))
 dBat1.place(x=40, y=85)
 
-dBat2 = Label(BAT_Stats, text="Cell_2 = 4.1v",
+dBat2 = Label(BAT_Stats, text="Cell_2 = 99",
               bg="black", fg="white", font=("Arial", 28))
 dBat2.place(x=40, y=135)
 
-dBat3 = Label(BAT_Stats, text="Cell_3 = 4.1v",
+dBat3 = Label(BAT_Stats, text="Cell_3 = 99",
               bg="black", fg="white", font=("Arial", 28))
 dBat3.place(x=40, y=190)
 
-dBat4 = Label(BAT_Stats, text="Cell_4 = 4.1v",
+dBat4 = Label(BAT_Stats, text="Cell_4 = 99",
               bg="black", fg="white", font=("Arial", 28))
 dBat4.place(x=40, y=250)
 
-dBat_t = Label(BAT_Stats, text="DBat Temp = 25 C",
+dBat_t = Label(BAT_Stats, text="DBat Temp = 99 C",
                bg="black", fg=foreground, font=("Arial", 40))
 dBat_t.place(x=400, y=150)
 
@@ -398,7 +398,7 @@ cBat.place(x=400, y=370)
 cBata = Label(BAT_Stats, text="CTRL_pwr = LOW",
               bg="black", fg="red", font=("Arial", 30))
 
-cBat_t = Label(BAT_Stats, text="CBat Temp = 20 C",
+cBat_t = Label(BAT_Stats, text="CBat Temp = 99 C",
                bg="black", fg=foreground, font=("Arial", 40))
 cBat_t.place(x=400, y=425)
 
