@@ -297,7 +297,7 @@ btn2 = Button(root, height=3, width=10, text="Dashboard",
 
 
 Btn3 = Button(root, text="Quit", bg=foreground, command=Quit)
-Btn3.place(x=700, y=10)
+Btn3.place(x=675, y=10)
 
 osLabel = Label(root, bg=foreground, fg="white", font=(
     "Arial", 10), height=1, width=75, justify="left")
