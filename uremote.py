@@ -84,11 +84,11 @@ def Display(x):
 
 def alert(x):
     Dashboard()
-    alertLabel = Label(root, bg="red", font=("Arial", 40), text=x)
-    alertLabel.place(x=400, y=200)
+    alertLabel = Label(root, bg="red", font=("Arial", 25), text=x)
+    alertLabel.place(x=25, y=250)
     BAThud()
-    cBata.place(x=375, y=370)
-    CBata.place(x=375, y=370)
+    cBata.place(x=20, y=250)
+    CBata.place(x=20, y=250)
 
 
 def EXOhud():
