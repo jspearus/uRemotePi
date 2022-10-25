@@ -24,6 +24,8 @@ mynum = 0
 Stop_t = False
 foreground = "red"
 
+armed = False
+
 if platform.system() == "Linux":
     os.system('xinput map-to-output 6 HDMI-1')
     root.config(cursor="none")
@@ -48,13 +50,33 @@ elif platform.system() == "Windows":
 
 
 def Enable():
+    global armed
+    armed = True
     Enablebtn.place_forget()
     Disablebtn.place(x=300, y=75)
     quickMode.config(text="Quick Mode = En")
     port.write(str.encode("qen#"))
 
 
+def Open():
+    global armed
+    if armed == True:
+        open_btn.place_forget()
+        close_btn.place(x=260, y=240)
+        quickMode.config(text="Opened")
+        port.write(str.encode("hopen#"))
+
+
+def Close():
+    close_btn.place_forget()
+    open_btn.place(x=260, y=240)
+    quickMode.config(text="Closed")
+    port.write(str.encode("hclose#"))
+
+
 def Disable():
+    global armed
+    armed = False
     Disablebtn.place_forget()
     Enablebtn.place(x=300, y=75)
     quickMode.config(text="Quick Mode = Dis")
@@ -265,6 +287,13 @@ holdbtn = Button(Config_view, text="Hold", height=3,
                  width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
 holdbtn.place(x=475, y=240)
 
+open_btn = Button(Config_view, height=2, width=5,
+                  text="open", bg=foreground, command=Open)
+open_btn.place(x=260, y=240)
+
+close_btn = Button(Config_view, height=2, width=5,
+                   text="close", bg=foreground, command=Close)
+
 
 Enablebtn = Button(Config_view, text="Enable \nQuick", height=3,
                    width=10, bg=foreground, fg="black", font=("Arial", 10), command=Enable)
@@ -310,7 +339,6 @@ if platform.system() == "Linux":
 elif platform.system() == "Windows":
     osLabel.config(
         text="Device: PC                                                                                                          ")
-
 
 btn = Button(root, height=3, width=10,
              text="Config", bg=foreground, command=Config)
