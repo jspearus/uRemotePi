@@ -22,7 +22,8 @@ serBuffer = "System Safe"
 comData = ""
 mynum = 0
 Stop_t = False
-foreground = "red"
+foreground = "darkOrange2"
+text_1="white"
 mode = 0
 S
 armed = False
@@ -239,38 +240,38 @@ Bat_view = LabelFrame(Dash_view, text="-PowerMGMT-",
 Bat_view.place(x=250, y=75)
 
 DBat = Label(Bat_view, text="Drive_pwr = 99 V",
-             bg="black", fg="white", font=("Arial", 15))
+             bg="black", fg=text_1, font=("Arial", 15))
 DBat.place(x=7, y=5)
 
 DBat1 = Label(Bat_view, text="Cell_1 = 99",
-              bg="black", fg="white", font=("Arial", 10))
+              bg="black", fg=text_1, font=("Arial", 10))
 DBat1.place(x=12, y=30)
 
 DBat2 = Label(Bat_view, text="Cell_2 = 99",
-              bg="black", fg="white", font=("Arial", 10))
+              bg="black", fg=text_1, font=("Arial", 10))
 DBat2.place(x=12, y=50)
 
 DBat3 = Label(Bat_view, text="Cell_3 = 99",
-              bg="black", fg="white", font=("Arial", 10))
+              bg="black", fg=text_1, font=("Arial", 10))
 DBat3.place(x=12, y=70)
 
 DBat4 = Label(Bat_view, text="Cell_4 = 99",
-              bg="black", fg="white", font=("Arial", 10))
+              bg="black", fg=text_1, font=("Arial", 10))
 DBat4.place(x=12, y=90)
 
 DBat_t = Label(Bat_view, text="DBat Temp = 99 C",
-               bg="black", fg="white", font=("Arial", 11))
+               bg="black", fg=text_1, font=("Arial", 11))
 DBat_t.place(x=130, y=60)
 
 CBat = Label(Bat_view, text="CTRL_pwr = 99 V",
-             bg="black", fg="white", font=("Arial", 15))
+             bg="black", fg=text_1, font=("Arial", 15))
 CBat.place(x=42, y=135)
 
 CBata = Label(Bat_view, text="CTRL_pwr = LOW",
-              bg="black", fg="white", font=("Arial", 17))
+              bg="black", fg=text_1, font=("Arial", 17))
 
 CBat_t = Label(Bat_view, text="CBat Temp = 99 C",
-               bg="black", fg="white", font=("Arial", 17))
+               bg="black", fg=text_1, font=("Arial", 17))
 CBat_t.place(x=45, y=165)
 
 
@@ -283,15 +284,15 @@ BladePos = Label(Dash_view, text="Mode = Safe", bg="black",
 BladePos.place(x=20, y=85)
 
 quickMode = Label(Dash_view, text="Quick Mode = Dis", bg="black",
-                  fg="white", font=("Arial", 10))
+                  fg=text_1, font=("Arial", 10))
 quickMode.place(x=20, y=125)
 ################CONFIG VIEW DASH###############################
 bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
-                 fg="white", font=("Arial", 20))
+                 fg=text_1, font=("Arial", 20))
 bladePOS.place(x=50, y=20)
 
 bladeStat = Label(Config_view, text="Arm = Closed", bg="black",
-                  fg="white", font=("Arial", 15))
+                  fg=text_1, font=("Arial", 15))
 bladeStat.place(x=275, y=175)
 
 safebtn = Button(Config_view, text="Safe", height=3,
@@ -327,13 +328,13 @@ PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 20),
 PID_view.place(x=50, y=75)
 
 P_val = Label(PID_view, text="P = 3.5", bg="black",
-              fg="white", font=("Arial", 20))
+              fg=text_1, font=("Arial", 20))
 P_val.place(x=8, y=20)
 I_val = Label(PID_view, text="I = 1.0", bg="black",
-              fg="white", font=("Arial", 20))
+              fg=text_1, font=("Arial", 20))
 I_val.place(x=8, y=65)
 D_val = Label(PID_view, text="D = 1", bg="black",
-              fg="white", font=("Arial", 20))
+              fg=text_1, font=("Arial", 20))
 D_val.place(x=8, y=110)
 
 serLabel = Label(root, bg="black", fg=foreground, font=("Arial", 15), justify="left",
@@ -347,7 +348,7 @@ btn2 = Button(root, height=3, width=10, text="Dashboard",
 Btn3 = Button(root, text="Quit", bg=foreground, command=Quit)
 Btn3.place(x=675, y=10)
 
-osLabel = Label(root, bg=foreground, fg="white", font=(
+osLabel = Label(root, bg=foreground, fg=text_1, font=(
     "Arial", 10), height=1, width=75, justify="left")
 osLabel.place(x=40, y=20)
 
@@ -398,13 +399,13 @@ PID_Config = LabelFrame(EXO_Stats, text=" PID_Config ", font=("Arial", 35),
 PID_Config.place(x=400, y=150)
 
 P_val = Label(PID_Config, text="P = 3.5", bg="black",
-              fg="white", font=("Arial", 30))
+              fg=text_1, font=("Arial", 30))
 P_val.place(x=8, y=20)
 I_val = Label(PID_Config, text="I = 1.0", bg="black",
-              fg="white", font=("Arial", 30))
+              fg=text_1, font=("Arial", 30))
 I_val.place(x=8, y=65)
 D_val = Label(PID_Config, text="D = 1", bg="black",
-              fg="white", font=("Arial", 30))
+              fg=text_1, font=("Arial", 30))
 D_val.place(x=8, y=125)
 
 
@@ -419,19 +420,19 @@ dBat = Label(BAT_Stats, text="Drive_pwr = 99",
 dBat.place(x=20, y=15)
 
 dBat1 = Label(BAT_Stats, text="Cell_1 = 99",
-              bg="black", fg="white", font=("Arial", 28))
+              bg="black", fg=text_1, font=("Arial", 28))
 dBat1.place(x=40, y=85)
 
 dBat2 = Label(BAT_Stats, text="Cell_2 = 99",
-              bg="black", fg="white", font=("Arial", 28))
+              bg="black", fg=text_1, font=("Arial", 28))
 dBat2.place(x=40, y=135)
 
 dBat3 = Label(BAT_Stats, text="Cell_3 = 99",
-              bg="black", fg="white", font=("Arial", 28))
+              bg="black", fg=text_1, font=("Arial", 28))
 dBat3.place(x=40, y=190)
 
 dBat4 = Label(BAT_Stats, text="Cell_4 = 99",
-              bg="black", fg="white", font=("Arial", 28))
+              bg="black", fg=text_1, font=("Arial", 28))
 dBat4.place(x=40, y=250)
 
 dBat_t = Label(BAT_Stats, text="DBat Temp = 99 C",
