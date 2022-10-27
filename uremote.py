@@ -86,6 +86,7 @@ def Disable():
     cMode.config(text='System Safe')
     CMode.config(text='System Safe')
     port.write(str.encode("qdis#"))
+    Close()
 
 
 def Config():
