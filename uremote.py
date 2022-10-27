@@ -31,8 +31,8 @@ Background_3 = "red2"
 text_1 = "white"
 text_2 = "white"
 text_3 = "white"
+activeBG = "red"
 mode = 0
-S
 armed = False
 
 if platform.system() == "Linux":
@@ -303,31 +303,31 @@ bladeStat = Label(Config_view, text="Arm = Closed", bg=Background,
 bladeStat.place(x=275, y=175)
 
 safebtn = Button(Config_view, text="Safe", height=3,
-                 width=10, bg=foreground, fg=text_2, font=("Arial", 10), command=lambda: SerialOut(b"modeS#"))
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=lambda: SerialOut(b"modeS#"))
 safebtn.place(x=475, y=60)
 
 syncbtn = Button(Config_view, text="Sync", height=3,
-                 width=10, bg=foreground, fg=text_2, font=("Arial", 10), command=lambda: SerialOut(b"modes#"))
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=lambda: SerialOut(b"modes#"))
 syncbtn.place(x=475, y=150)
 
 holdbtn = Button(Config_view, text="Hold", height=3,
-                 width=10, bg=foreground, fg=text_2, font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
 holdbtn.place(x=475, y=240)
 
 open_btn = Button(Config_view, height=2, width=5,
-                  text="open", bg=foreground, fg=text_2, command=Open)
+                  text="open", bg=foreground, fg=text_2, activebackground=activeBG, command=Open)
 open_btn.place(x=260, y=240)
 
 close_btn = Button(Config_view, height=2, width=5,
-                   text="close", bg=foreground, fg=text_2, command=Close)
+                   text="close", bg=foreground, fg=text_2, activebackground=activeBG, command=Close)
 
 
 Enablebtn = Button(Config_view, text="Enable \nQuick", height=3,
-                   width=10, bg=foreground, fg=text_2, font=("Arial", 10), command=Enable)
+                   width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Enable)
 Enablebtn.place(x=300, y=75)
 
 Disablebtn = Button(Config_view, text="Disable \nQuick", height=3,
-                    width=10, bg=foreground, fg=text_2, font=("Arial", 10), command=Disable)
+                    width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Disable)
 
 
 PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 20),
@@ -349,10 +349,11 @@ serLabel = Label(root, bg=Background, fg=foreground, font=("Arial", 15), justify
 serLabel.place(x=300, y=100)
 
 btn2 = Button(root, height=3, width=10, text="Dashboard",
-              bg=foreground, fg=text_2, command=Dashboard)
+              bg=foreground, fg=text_2, activebackground=activeBG, command=Dashboard)
 
 
-Btn3 = Button(root, text="Quit", bg=foreground, fg=text_2, command=Quit)
+Btn3 = Button(root, text="Quit", bg=foreground, fg=text_2,
+              activebackground=activeBG, command=Quit)
 Btn3.place(x=675, y=10)
 
 osLabel = Label(root, bg=foreground, fg=text_1, font=(
@@ -368,16 +369,16 @@ elif platform.system() == "Windows":
         text="Device: PC                                                                                                          ")
 
 btn = Button(root, height=3, width=10,
-             text="Config", bg=foreground, fg=text_2, command=Config)
+             text="Config", bg=foreground, fg=text_2, activebackground=activeBG, command=Config)
 btn.place(x=625, y=350)
 
 
 btn5 = Button(root, text="HUD_bat \nView", height=3,
-              width=10, bg=foreground, fg=text_2, command=BAThud)
+              width=10, bg=foreground, fg=text_2, activebackground=activeBG, command=BAThud)
 btn5.place(x=625, y=250)
 
 btn6 = Button(root, text="HUD_EXO \nView", height=3,
-              width=10, bg=foreground, fg=text_2, command=EXOhud)
+              width=10, bg=foreground, fg=text_2, activebackground=activeBG, command=EXOhud)
 
 
 ######################### HUD WIDGETS ############################
