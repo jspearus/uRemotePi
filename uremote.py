@@ -56,6 +56,8 @@ def Enable():
     Enablebtn.place_forget()
     Disablebtn.place(x=300, y=75)
     quickMode.config(text="Quick Mode = En")
+    cMode.config(text='System Armed')
+    CMode.config(text='System Armed')
     port.write(str.encode("qen#"))
 
 
@@ -64,14 +66,14 @@ def Open():
     if armed == True:
         open_btn.place_forget()
         close_btn.place(x=260, y=240)
-        quickMode.config(text="Opened")
+        bladeStat.config(text="Arm = Opened")
         port.write(str.encode("hopen#"))
 
 
 def Close():
     close_btn.place_forget()
     open_btn.place(x=260, y=240)
-    quickMode.config(text="Closed")
+    bladeStat.config(text="Arm = Closed")
     port.write(str.encode("hclose#"))
 
 
@@ -81,6 +83,8 @@ def Disable():
     Disablebtn.place_forget()
     Enablebtn.place(x=300, y=75)
     quickMode.config(text="Quick Mode = Dis")
+    cMode.config(text='System Safe')
+    CMode.config(text='System Safe')
     port.write(str.encode("qdis#"))
 
 
@@ -157,7 +161,7 @@ def serialRead():
             EXOhud()
 
         elif 'armed' in data[0]:
-            if mode > 0 and mode < 4:
+            if mode > 0:
                 cMode.config(text='System Armed')
                 CMode.config(text='System Armed')
             else:
@@ -284,6 +288,10 @@ quickMode.place(x=20, y=125)
 bladePOS = Label(Config_view, text="Mode = Safe", bg="black",
                  fg="white", font=("Arial", 20))
 bladePOS.place(x=50, y=20)
+
+bladeStat = Label(Config_view, text="Arm = Closed", bg="black",
+                  fg="white", font=("Arial", 15))
+bladeStat.place(x=275, y=175)
 
 safebtn = Button(Config_view, text="Safe", height=3,
                  width=10, bg=foreground, fg="black", font=("Arial", 10), command=lambda: SerialOut(b"modeS#"))
