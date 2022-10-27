@@ -18,12 +18,13 @@ root.title("_Mantis_Blade_")
 root.geometry('2080x730+0+0')
 
 text = ""
-serBuffer = "System Armed"
+serBuffer = "System Safe"
 comData = ""
 mynum = 0
 Stop_t = False
 foreground = "red"
-
+mode = 0
+S
 armed = False
 
 if platform.system() == "Linux":
@@ -141,6 +142,7 @@ def SerialOut(com):
 
 def serialRead():
     global serBuffer
+    global mode
     serLabel.config(text="Device not Connected...")
     while True:
         Data = port.readline()
@@ -155,26 +157,34 @@ def serialRead():
             EXOhud()
 
         elif 'armed' in data[0]:
-            cMode.config(text='System Armed')
-            CMode.config(text='System Armed')
+            if mode > 0 and mode < 4:
+                cMode.config(text='System Armed')
+                CMode.config(text='System Armed')
+            else:
+                cMode.config(text='System Safe')
+                CMode.config(text='System Safe')
             EXOhud()
 
         elif 'mode = 0' in data[0]:
+            mode = 0
             bladePos.config(text='Mode = Safe')
             bladePOS.config(text='Mode = Safe')
             BladePos.config(text='Mode = Safe')
 
         elif 'mode = 1' in data[0]:
+            mode = 1
             bladePos.config(text='Mode = Sync')
             bladePOS.config(text='Mode = Sync')
             BladePos.config(text='Mode = Sync')
 
         elif 'mode = 2' in data[0]:
+            mode = 2
             bladePos.config(text='Mode = Hold')
             bladePOS.config(text='Mode = Hold')
             BladePos.config(text='Mode = Hold')
 
         elif 'mode = 4' in data[0]:
+            mode = 4
             bladePos.config(text='Mode = Quick')
             bladePOS.config(text='Mode = Quick')
             BladePos.config(text='Mode = Quick')
