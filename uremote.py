@@ -32,6 +32,8 @@ text_1 = "white"
 text_2 = "white"
 text_3 = "white"
 activeBG = "red"
+BGAlert = "gray8"
+AlertText = "red"
 mode = 0
 armed = False
 
@@ -59,6 +61,7 @@ elif platform.system() == "Windows":
 
 
 def Enable():
+    Alert_frame.place(x=260, y=60)
     global armed
     armed = True
     Enablebtn.place_forget()
@@ -67,6 +70,28 @@ def Enable():
     cMode.config(text='System Armed')
     CMode.config(text='System Armed')
     port.write(str.encode("qen#"))
+
+
+def Safe():
+    global armed
+    armed = False
+    port.write(str.encode("modeS#"))
+
+
+def Sync():
+    global armed
+    if armed == False:
+        armed = True
+        Alert_frame.place(x=260, y=60)
+    port.write(str.encode("modes#"))
+
+
+def Hold():
+    global armed
+    if armed == "false":
+        armed = True
+        Alert_frame.place(x=260, y=60)
+    port.write(str.encode("modeh#"))
 
 
 def Open():
@@ -147,6 +172,10 @@ def Quit():
     global Stop_t
     Stop_t = True
     root.destroy()
+
+
+def saftey():
+    Alert_frame.place_forget()
 
 
 def SerialOut(com):
@@ -303,15 +332,15 @@ bladeStat = Label(Config_view, text="Arm = Closed", bg=Background,
 bladeStat.place(x=275, y=175)
 
 safebtn = Button(Config_view, text="Safe", height=3,
-                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=lambda: SerialOut(b"modeS#"))
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Safe)
 safebtn.place(x=475, y=60)
 
 syncbtn = Button(Config_view, text="Sync", height=3,
-                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=lambda: SerialOut(b"modes#"))
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Sync)
 syncbtn.place(x=475, y=150)
 
 holdbtn = Button(Config_view, text="Hold", height=3,
-                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=lambda: SerialOut(b"modeh#"))
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Hold)
 holdbtn.place(x=475, y=240)
 
 open_btn = Button(Config_view, height=2, width=5,
@@ -380,6 +409,19 @@ btn5.place(x=625, y=250)
 btn6 = Button(root, text="HUD_EXO \nView", height=3,
               width=10, bg=foreground, fg=text_2, activebackground=activeBG, command=EXOhud)
 
+
+########################Warning Frame#########################################################
+
+Alert_frame = LabelFrame(Config_view, text="-ALERT-", fg=AlertText, font=("Arial", 20),
+                         width=315, height=245, bd=5, bg=BGAlert)
+Alert_Text = Label(Alert_frame, text="Remove \nSaftey \nStrap!!!", bg=BGAlert,
+                   fg=AlertText, font=("Arial", 40))
+Alert_Text.place(x=20, y=10)
+
+Donebtn = Button(Alert_frame, text="Done", height=1,
+                 width=3, bg=BGAlert, fg=AlertText,
+                 activebackground=activeBG, font=("Arial", 20), command=saftey)
+Donebtn.place(x=225, y=145)
 
 ######################### HUD WIDGETS ############################
 
