@@ -1,116 +1,507 @@
+#! /usr/bin/python3
+
 from tkinter import *
 import serial
 import time
 import os
 import platform
+import threading
+
+from serial.serialutil import Timeout
 
 
-hud = Tk()
 root = Tk()
 
 
 root.configure(background='black')
 root.title("_Mantis_Blade_")
-root.geometry('800x480')
-
-hud.configure(background='black')
-hud.title("_Mantis_Blade_HUD")
-hud.geometry('600x300')
-
+root.geometry('2080x730+0+0')
 
 text = ""
+serBuffer = "System Safe"
+comData = ""
+mynum = 0
+Stop_t = False
+
+foreground = "red4"
+foreground_2 = "red4"
+Background = "gray8"
+Background_2 = "red2"
+Background_3 = "red2"
+text_1 = "white"
+text_2 = "white"
+text_3 = "white"
+activeBG = "red"
+BGAlert = "gray8"
+AlertText = "red"
+mode = 0
+armed = False
 
 if platform.system() == "Linux":
-    port = serial.Serial("/dev/ttyAMA0", baudrate=115200, timeout=3.0)
+    os.system('xinput map-to-output 6 HDMI-1')
     root.config(cursor="none")
-    root.attributes('-fullscreen', True)
+    root.attributes('-fullscreen', False)
+    try:  # /dev/ttyACM0
+        port = serial.Serial('/dev/serial0', baudrate=115200,
+                             bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+        port.write(str.encode("comm#"))
+        port.write(str.encode("comm#"))
+    except serial.SerialException as e:
+        print("device not detected")
+
+
 elif platform.system() == "Windows":
-    #port = serial.Serial("COM7", baudrate=115200, timeout=3.0)
-    pass
+
+    try:
+        port = serial.Serial('COM10', baudrate=115200, timeout=10)
+        print("COM10 Connected")
+        port.write(str.encode("comm#"))
+    except serial.SerialException as e:
+        print("device not detected")
+
+
+def Enable():
+    Alert_frame.place(x=260, y=60)
+    global armed
+    armed = True
+    Enablebtn.place_forget()
+    Disablebtn.place(x=300, y=75)
+    quickMode.config(text="Quick Mode = En")
+    cMode.config(text='System Armed')
+    CMode.config(text='System Armed')
+    port.write(str.encode("qen#"))
+
+
+def Safe():
+    global armed
+    armed = False
+    port.write(str.encode("modeS#"))
+
+
+def Sync():
+    global armed
+    if armed == False:
+        armed = True
+        Alert_frame.place(x=260, y=60)
+    port.write(str.encode("modes#"))
+
+
+def Hold():
+    global armed
+    if armed == "false":
+        armed = True
+        Alert_frame.place(x=260, y=60)
+    port.write(str.encode("modeh#"))
+
+
+def Open():
+    global armed
+    if armed == True:
+        open_btn.place_forget()
+        close_btn.place(x=260, y=240)
+        bladeStat.config(text="Arm = Opened")
+        port.write(str.encode("hopen#"))
+
+
+def Close():
+    close_btn.place_forget()
+    open_btn.place(x=260, y=240)
+    bladeStat.config(text="Arm = Closed")
+    port.write(str.encode("hclose#"))
+
+
+def Disable():
+    global armed
+    armed = False
+    Disablebtn.place_forget()
+    Enablebtn.place(x=300, y=75)
+    quickMode.config(text="Quick Mode = Dis")
+    cMode.config(text='System Safe')
+    CMode.config(text='System Safe')
+    port.write(str.encode("qdis#"))
+    Close()
 
 
 def Config():
-    textBox.insert(END, "Config")
-    textBox.yview(END)
-    my_frame.place_forget()
-    new_frame.place(x=40, y=60, width=300, height=200)
-    btn2.place(x=700, y=200)
-    Display("Execute")
+    Dash_view.place_forget()
+    btn.place_forget()
+    Config_view.place(x=10, y=50)
+    btn2.place(x=625, y=350)
+    port.write(str.encode("config#"))
 
 
 def Dashboard():
-    textBox.insert(END, "Dashboard")
-    textBox.yview(END)
-    new_frame.place_forget()
+    Config_view.place_forget()
     btn2.place_forget()
-    my_frame.place(x=40, y=60)
-    Display("Reset      ")
+    btn.place(x=625, y=350)
+    Dash_view.place(x=10, y=50)
+    port.write(str.encode("dash#"))
 
 
 def Display(x):
-    myLabel = Label(root, bg="DarkOrange1", text=x)
+    myLabel = Label(root, bg=Background_3, text=x)
     myLabel.place(x=250, y=10)
 
 
-def Clear():
-    textBox.delete(0, END)
-    Display("Clear      ")
+def alert(x):
+    Dashboard()
+    alertLabel = Label(root, bg=Background_2, font=("Arial", 25), text=x)
+    alertLabel.place(x=25, y=250)
+    BAThud()
+    cBata.place(x=20, y=250)
+    CBata.place(x=20, y=250)
+
+
+def EXOhud():
+    EXO_Stats.place(x=900, y=100)
+    BAT_Stats.place_forget()
+    btn5.place(x=625, y=250)
+    btn6.place_forget()
+    port.write(str.encode("exov#"))
+
+
+def BAThud():
+    BAT_Stats.place(x=900, y=100)
+    EXO_Stats.place_forget()
+    btn5.place_forget()
+    btn6.place(x=625, y=250)
+    port.write(str.encode("ctrlt#"))
 
 
 def Quit():
+    global Stop_t
+    Stop_t = True
     root.destroy()
-    hud.destroy()
 
 
+def saftey():
+    Alert_frame.place_forget()
+
+
+def SerialOut(com):
+    port.write(com)
+
+
+def serialRead():
+    global serBuffer
+    global mode
+    serLabel.config(text="Device not Connected...")
+    while True:
+        Data = port.readline()
+        Data = str(Data, 'UTF-8')
+        data = Data.split(',')
+        # serLabel.config(text=data[0])
+        if 'MANTIS' in data[0]:
+            serLabel.config(text="M.A.N.T.I.S. Arm Detected")
+        elif 'config' in data[0]:
+            cMode.config(text='Config Mode')
+            CMode.config(text='Config Mode')
+            EXOhud()
+
+        elif 'armed' in data[0]:
+            if mode > 0:
+                cMode.config(text='System Armed')
+                CMode.config(text='System Armed')
+            else:
+                cMode.config(text='System Safe')
+                CMode.config(text='System Safe')
+            EXOhud()
+
+        elif 'mode = 0' in data[0]:
+            mode = 0
+            bladePos.config(text='Mode = Safe')
+            bladePOS.config(text='Mode = Safe')
+            BladePos.config(text='Mode = Safe')
+
+        elif 'mode = 1' in data[0]:
+            mode = 1
+            bladePos.config(text='Mode = Sync')
+            bladePOS.config(text='Mode = Sync')
+            BladePos.config(text='Mode = Sync')
+
+        elif 'mode = 2' in data[0]:
+            mode = 2
+            bladePos.config(text='Mode = Hold')
+            bladePOS.config(text='Mode = Hold')
+            BladePos.config(text='Mode = Hold')
+
+        elif 'mode = 4' in data[0]:
+            mode = 4
+            bladePos.config(text='Mode = Quick')
+            bladePOS.config(text='Mode = Quick')
+            BladePos.config(text='Mode = Quick')
+
+        elif 'stat' in data[0]:
+            dBat.config(text='Drv_Bat = ' + data[1]+' V')
+            DBat.config(text='Drv_Bat = ' + data[1]+' V')
+            dBat_t.config(text='Drv_Temp = ' + data[2]+' C')
+            DBat_t.config(text='Drv_Temp = ' + data[2]+' C')
+            dBat1.config(text='Cell_1 = ' + data[3])
+            DBat1.config(text='Cell_1 = ' + data[3])
+            dBat2.config(text='Cell_2 = ' + data[4])
+            DBat2.config(text='Cell_2 = ' + data[4])
+            dBat3.config(text='Cell_3 = ' + data[5])
+            DBat3.config(text='Cell_3 = ' + data[5])
+            dBat4.config(text='Cell_4 = ' + data[6])
+            DBat4.config(text='Cell_4 = ' + data[6])
+            cBat.config(text='Ctrl_Bat = ' + data[8]+' V')
+            CBat.config(text='Ctrl_Bat = ' + data[8]+' V')
+            cBat_t.config(text='Ctrl_Temp = ' + data[7]+' C')
+            CBat_t.config(text='Ctrl_Temp = ' + data[7]+' C')
+
+        elif 'ctrlblow' in data[0]:
+            alert('Ctrl Bat V Low')
+
+        elif 'alert' in data[0]:
+            alert('Drive Bat V Low')
+        data = ''
+        time.sleep(.2)
+        if Stop_t:
+            break
+
+
+################ MAIN DISPLAY #####################################
 # create frame and scrollbar
-my_frame = Frame(root)
+Dash_frame = Frame(root, bg=Background)
 
-my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)
+Dash_view = LabelFrame(root, text="-Dashbord-", font=("Arial", 20),
+                       width=600, height=350, bd=5, bg=Background, fg=foreground)
+Dash_view.place(x=10, y=50)
+
+Config_view = LabelFrame(root, text="-Configuration-", font=("Arial", 20),
+                         width=600, height=350, bd=5, bg=Background, fg=foreground)
+
+Bat_view = LabelFrame(Dash_view, text="-PowerMGMT-",
+                      bg=Background, fg=foreground, height=225, width=300)
+Bat_view.place(x=250, y=75)
+
+DBat = Label(Bat_view, text="Drive_Bat = 99 V",
+             bg=Background, fg=text_1, font=("Arial", 15))
+DBat.place(x=7, y=5)
+
+DBat1 = Label(Bat_view, text="Cell_1 = 99",
+              bg=Background, fg=text_1, font=("Arial", 10))
+DBat1.place(x=12, y=30)
+
+DBat2 = Label(Bat_view, text="Cell_2 = 99",
+              bg=Background, fg=text_1, font=("Arial", 10))
+DBat2.place(x=12, y=50)
+
+DBat3 = Label(Bat_view, text="Cell_3 = 99",
+              bg=Background, fg=text_1, font=("Arial", 10))
+DBat3.place(x=12, y=70)
+
+DBat4 = Label(Bat_view, text="Cell_4 = 99",
+              bg=Background, fg=text_1, font=("Arial", 10))
+DBat4.place(x=12, y=90)
+
+DBat_t = Label(Bat_view, text="DBat Temp = 99 C",
+               bg=Background, fg=text_1, font=("Arial", 11))
+DBat_t.place(x=130, y=60)
+
+CBat = Label(Bat_view, text="CTRL_Bat = 99 V",
+             bg=Background, fg=text_1, font=("Arial", 15))
+CBat.place(x=42, y=135)
+
+CBata = Label(Bat_view, text="CTRL_Bat = LOW",
+              bg=Background, fg=text_1, font=("Arial", 17))
+
+CBat_t = Label(Bat_view, text="CBat Temp = 99 C",
+               bg=Background, fg=text_1, font=("Arial", 17))
+CBat_t.place(x=45, y=165)
 
 
-textBox = Listbox(my_frame, bg="blue", width=40, height=20,
-                  justify="left", yscrollcommand=my_scrollbar.set)
+CMode = Label(Dash_view, text=serBuffer,
+              bg=Background_2, fg=text_3, font=("Arial", 20))
+CMode.place(x=20, y=15)
 
-# config scrollar
-my_scrollbar.config(command=textBox.yview)
-my_scrollbar.pack(side=RIGHT, fill=Y)
-my_frame.place(x=40, y=60)
-textBox.pack()
+BladePos = Label(Dash_view, text="Mode = Safe", bg=Background,
+                 fg=foreground, font=("Arial", 15))
+BladePos.place(x=20, y=85)
 
-new_frame = Frame(root, bg="snow")
+quickMode = Label(Dash_view, text="Quick Mode = Dis", bg=Background,
+                  fg=text_1, font=("Arial", 10))
+quickMode.place(x=20, y=125)
+################CONFIG VIEW DASH###############################
+bladePOS = Label(Config_view, text="Mode = Safe", bg=Background,
+                 fg=text_1, font=("Arial", 20))
+bladePOS.place(x=50, y=20)
 
-newLabel = Label(new_frame, bg="Orange", justify="left",
-                 text='Mantis_Blade_config')
-secLabel = Label(new_frame, bg="grey", justify="left",
-                 text='this is a new test')
-newLabel.place(x=0, y=0)
-secLabel.place(x=30, y=100)
+bladeStat = Label(Config_view, text="Arm = Closed", bg=Background,
+                  fg=text_1, font=("Arial", 15))
+bladeStat.place(x=275, y=175)
 
-btn2 = Button(root, text="Dashboard", bg="red", command=Dashboard)
+safebtn = Button(Config_view, text="Safe", height=3,
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Safe)
+safebtn.place(x=475, y=60)
+
+syncbtn = Button(Config_view, text="Sync", height=3,
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Sync)
+syncbtn.place(x=475, y=150)
+
+holdbtn = Button(Config_view, text="Hold", height=3,
+                 width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Hold)
+holdbtn.place(x=475, y=240)
+
+open_btn = Button(Config_view, height=2, width=5,
+                  text="open", bg=foreground, fg=text_2, activebackground=activeBG, command=Open)
+open_btn.place(x=260, y=240)
+
+close_btn = Button(Config_view, height=2, width=5,
+                   text="close", bg=foreground, fg=text_2, activebackground=activeBG, command=Close)
 
 
-Btn3 = Button(root, text="Quit", bg="blue", command=Quit)
-Btn3.place(x=700, y=10)
+Enablebtn = Button(Config_view, text="Enable \nQuick", height=3,
+                   width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Enable)
+Enablebtn.place(x=300, y=75)
+
+Disablebtn = Button(Config_view, text="Disable \nQuick", height=3,
+                    width=10, bg=foreground, fg=text_2, activebackground=activeBG, font=("Arial", 10), command=Disable)
 
 
-osLabel = Label(root, bg="DarkOrange2",
-                text="OS Detected: " + platform.system())
+PID_view = LabelFrame(Config_view, text=" PID_Config ", font=("Arial", 20),
+                      width=200, height=200, bd=5, bg="black", fg=foreground)
+PID_view.place(x=50, y=75)
+
+P_val = Label(PID_view, text="P = 3.5", bg=Background,
+              fg=text_1, font=("Arial", 20))
+P_val.place(x=8, y=20)
+I_val = Label(PID_view, text="I = 1.0", bg=Background,
+              fg=text_1, font=("Arial", 20))
+I_val.place(x=8, y=65)
+D_val = Label(PID_view, text="D = 1", bg=Background,
+              fg=text_1, font=("Arial", 20))
+D_val.place(x=8, y=110)
+
+serLabel = Label(root, bg=Background, fg=foreground, font=("Arial", 15), justify="left",
+                 text='serial status   ')
+serLabel.place(x=300, y=100)
+
+btn2 = Button(root, height=3, width=10, text="Dashboard",
+              bg=foreground, fg=text_2, activebackground=activeBG, command=Dashboard)
+
+
+Btn3 = Button(root, text="Quit", bg=foreground, fg=text_2,
+              activebackground=activeBG, command=Quit)
+Btn3.place(x=675, y=10)
+
+osLabel = Label(root, bg=foreground, fg=text_1, font=(
+    "Arial", 10), height=1, width=75, justify="left")
 osLabel.place(x=40, y=20)
 
+if platform.system() == "Linux":
+    osLabel.config(
+        text="Device: Cyber Deck v 2.0.0                                                                                           ", justify="left")
 
-btn = Button(root, text="Config", bg="red", command=Config)
-btn.place(x=700, y=400)
+elif platform.system() == "Windows":
+    osLabel.config(
+        text="Device: PC                                                                                                          ")
+
+btn = Button(root, height=3, width=10,
+             text="Config", bg=foreground, fg=text_2, activebackground=activeBG, command=Config)
+btn.place(x=625, y=350)
 
 
-#btn2 = Button(root, text="Dashboard", bg="blue", command=Dashboard)
-#btn2.place(x=600, y=400)
+btn5 = Button(root, text="HUD_bat \nView", height=3,
+              width=10, bg=foreground, fg=text_2, activebackground=activeBG, command=BAThud)
+btn5.place(x=625, y=250)
 
-btn4 = Button(root, text="clear", bg="blue", command=Clear)
-btn4.place(x=40, y=440)
+btn6 = Button(root, text="HUD_EXO \nView", height=3,
+              width=10, bg=foreground, fg=text_2, activebackground=activeBG, command=EXOhud)
 
-hudLabel = Label(hud, text="this is the hud")
-hudLabel.place(x=275, y=150)
 
+########################Warning Frame#########################################################
+
+Alert_frame = LabelFrame(Config_view, text="-ALERT-", fg=AlertText, font=("Arial", 20),
+                         width=315, height=245, bd=5, bg=BGAlert)
+Alert_Text = Label(Alert_frame, text="Remove \nSaftey \nStrap!!!", bg=BGAlert,
+                   fg=AlertText, font=("Arial", 40))
+Alert_Text.place(x=20, y=10)
+
+Donebtn = Button(Alert_frame, text="Done", height=1,
+                 width=3, bg=BGAlert, fg=AlertText,
+                 activebackground=activeBG, font=("Arial", 20), command=saftey)
+Donebtn.place(x=225, y=145)
+
+######################### HUD WIDGETS ############################
+
+
+hudLabel = Label(root, text="HUD view", font=(
+    "Arial", 30),  bg=Background, fg=foreground)
+hudLabel.place(x=900, y=20)
+
+#################### HUD EXO FRAME ###############################
+
+EXO_Stats = LabelFrame(root, text=" EXO_Stats ", font=("Arial", 50),
+                       width=1000, height=600, bd=15, bg=Background, fg=foreground)
+EXO_Stats.place(x=900, y=100)
+
+cMode = Label(EXO_Stats, text=serBuffer,
+              bg=Background_2, fg="black", font=("Arial", 40))
+cMode.place(x=20, y=15)
+
+bladePos = Label(EXO_Stats, text="Mode = Safe", bg=Background,
+                 fg=foreground, font=("Arial", 35))
+bladePos.place(x=20, y=85)
+
+PID_Config = LabelFrame(EXO_Stats, text=" PID_Config ", font=("Arial", 35),
+                        width=350, height=300, bd=10, bg=Background, fg=foreground)
+PID_Config.place(x=400, y=150)
+
+P_val = Label(PID_Config, text="P = 3.5", bg=Background,
+              fg=text_1, font=("Arial", 30))
+P_val.place(x=8, y=20)
+I_val = Label(PID_Config, text="I = 1.0", bg=Background,
+              fg=text_1, font=("Arial", 30))
+I_val.place(x=8, y=65)
+D_val = Label(PID_Config, text="D = 1", bg=Background,
+              fg=text_1, font=("Arial", 30))
+D_val.place(x=8, y=125)
+
+
+# ################### HUD BAT FRAME ##############################
+
+BAT_Stats = LabelFrame(root, text=" BAT_Stats ", font=("Arial", 50),
+                       width=1000, height=600, bd=15, bg=Background, fg=foreground)
+# BAT_Stats.place(x=20, y=100)
+
+dBat = Label(BAT_Stats, text="Drive_Bat = 99",
+             bg=Background, fg=foreground, font=("Arial", 32))
+dBat.place(x=20, y=15)
+
+dBat1 = Label(BAT_Stats, text="Cell_1 = 99",
+              bg=Background, fg=text_1, font=("Arial", 28))
+dBat1.place(x=40, y=85)
+
+dBat2 = Label(BAT_Stats, text="Cell_2 = 99",
+              bg=Background, fg=text_1, font=("Arial", 28))
+dBat2.place(x=40, y=135)
+
+dBat3 = Label(BAT_Stats, text="Cell_3 = 99",
+              bg=Background, fg=text_1, font=("Arial", 28))
+dBat3.place(x=40, y=190)
+
+dBat4 = Label(BAT_Stats, text="Cell_4 = 99",
+              bg=Background, fg=text_1, font=("Arial", 28))
+dBat4.place(x=40, y=250)
+
+dBat_t = Label(BAT_Stats, text="DBat Temp = 99 C",
+               bg=Background, fg=foreground, font=("Arial", 40))
+dBat_t.place(x=400, y=150)
+
+cBat = Label(BAT_Stats, text="CTRL_Bat = LOW",
+             bg=Background, fg=foreground, font=("Arial", 30))
+cBat.place(x=400, y=370)
+
+cBata = Label(BAT_Stats, text="bat = LOW",
+              bg=Background, fg=foreground_2, font=("Arial", 30))
+
+cBat_t = Label(BAT_Stats, text="CBat Temp = 99 C",
+               bg=Background, fg=foreground, font=("Arial", 40))
+cBat_t.place(x=400, y=425)
+
+serial = threading.Thread(target=serialRead, args=())
+serial.setDaemon(True)
+serial.start()
 
 root.mainloop()
-hud.mainloop()
